@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
+import { PHONE_TEL, WHATSAPP_URL } from "@/lib/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,7 +72,7 @@ export default function RootLayout({
 
         {/* Floating Call button — bottom left */}
         <a
-          href="tel:+917451874271"
+          href={PHONE_TEL}
           aria-label="Call us"
           className="fixed bottom-24 lg:bottom-6 left-5 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-[#14B8A6] to-[#0d9488] text-white flex items-center justify-center shadow-lg shadow-[#14B8A6]/25 hover:scale-110 hover:shadow-xl hover:shadow-[#14B8A6]/30 transition-all duration-300"
         >
@@ -82,7 +83,7 @@ export default function RootLayout({
 
         {/* Floating WhatsApp button — bottom right */}
         <a
-          href="https://wa.me/917451874271"
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat on WhatsApp"
