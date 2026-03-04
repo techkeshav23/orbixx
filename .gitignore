@@ -23,6 +23,11 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
+desktop.ini
+
+# private assets (not for public access)
+/private-assets/
 
 # debug
 npm-debug.log*
