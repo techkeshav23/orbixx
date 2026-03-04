@@ -30,6 +30,54 @@ export default function Testimonials() {
       result: "+100% ENERGY",
       time: "3 months",
     },
+    {
+      quote:
+        "Post-pregnancy, I thought my body would never recover. Orbixx\u2019s Zumba classes made fitness fun again. Lost 12kg and gained so much confidence!",
+      name: "Sneha Desai",
+      loc: "Delhi",
+      result: "-12 KG",
+      time: "5 months",
+    },
+    {
+      quote:
+        "From size XL to M \u2014 I still can\u2019t believe it. The trainers remember your name, push you just right, and the community keeps you accountable.",
+      name: "Kavita Patil",
+      loc: "Pune",
+      result: "XL \u2192 M",
+      time: "7 months",
+    },
+    {
+      quote:
+        "PCOD symptoms reduced drastically within 3 months. My hormonal balance improved and I feel like a completely new person. Orbixx is a lifesaver.",
+      name: "Ritu Mehta",
+      loc: "Jaipur",
+      result: "PCOD RELIEF",
+      time: "4 months",
+    },
+    {
+      quote:
+        "I dance every morning now. My kids join in too! It\u2019s become a family ritual. The flexible timing makes it so easy to fit into my schedule.",
+      name: "Deepika Gupta",
+      loc: "Agra",
+      result: "-14 KG",
+      time: "6 months",
+    },
+    {
+      quote:
+        "As a working professional with no time for the gym, Orbixx was a game-changer. 30 minutes from home, real results. Best investment I\u2019ve made in myself.",
+      name: "Nisha Thakur",
+      loc: "Chennai",
+      result: "3X FITNESS",
+      time: "3 months",
+    },
+    {
+      quote:
+        "I was skeptical about online fitness. After one week of Orbixx, I was addicted. The energy of live classes is unmatched. 10kg down and counting!",
+      name: "Swati Joshi",
+      loc: "Ahmedabad",
+      result: "-10 KG",
+      time: "4 months",
+    },
   ];
 
   return (
@@ -48,7 +96,7 @@ export default function Testimonials() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.05] tracking-tight">
             They did it.
             <br />
-            <span className="text-slate-300">So can you.</span>
+            So can you.
           </h2>
         </div>
 
@@ -75,7 +123,7 @@ export default function Testimonials() {
                   </span>
                 </div>
 
-                <blockquote className="text-slate-500 text-sm leading-[1.8] mb-8">
+                <blockquote className="text-slate-700 text-sm leading-[1.8] mb-8 font-semibold">
                   &ldquo;{story.quote}&rdquo;
                 </blockquote>
 

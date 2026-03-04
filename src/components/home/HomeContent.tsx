@@ -14,11 +14,9 @@ import Footer from "@/components/Footer";
 
 /* ── Lazy-loaded modals — only fetched when the user triggers them ── */
 const Carousel3D = dynamic(() => import("./Carousel3D"), { ssr: false });
-const SpinWheel = dynamic(() => import("./SpinWheel"), { ssr: false });
 
 export default function HomeContent() {
   const [showCarousel, setShowCarousel] = useState(false);
-  const [showSpinWheel, setShowSpinWheel] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
 
   return (
@@ -26,7 +24,6 @@ export default function HomeContent() {
       {showBanner && <OfferBanner onClose={() => setShowBanner(false)} />}
       <Hero
         onSeeResults={() => setShowCarousel(true)}
-        onSpinWheel={() => setShowSpinWheel(true)}
       />
       <Marquee />
       <Features />
@@ -41,12 +38,6 @@ export default function HomeContent() {
         <Carousel3D
           open={showCarousel}
           onClose={() => setShowCarousel(false)}
-        />
-      )}
-      {showSpinWheel && (
-        <SpinWheel
-          open={showSpinWheel}
-          onClose={() => setShowSpinWheel(false)}
         />
       )}
     </>

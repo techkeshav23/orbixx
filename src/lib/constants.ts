@@ -24,12 +24,3 @@ export const carouselImages = [
   { src: "/transformations/deepika.jpg", name: "Deepika G.", result: "-14 kg" },
   { src: "/transformations/nisha.jpg", name: "Nisha T.", result: "-7 kg" },
 ];
-
-export const wheelOffers = [
-  { label: "10% OFF", color: "#FF6B4A", emoji: "🏷️" },
-  { label: "FREE CLASS", color: "#14B8A6", emoji: "🎉" },
-  { label: "FREE WEEK", color: "#EC4899", emoji: "🔥" },
-  { label: "20% OFF", color: "#FF6B4A", emoji: "💰" },
-  { label: "1 MONTH FREE", color: "#14B8A6", emoji: "🏆" },
-  { label: "15% OFF", color: "#EC4899", emoji: "✨" },
-];

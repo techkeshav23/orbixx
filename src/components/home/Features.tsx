@@ -103,7 +103,7 @@ export default function Features() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.05] tracking-tight">
             Not another fitness app.
             <br />
-            <span className="text-slate-300">A revolution.</span>
+            A revolution.
           </h2>
         </div>
 
@@ -142,10 +142,10 @@ export default function Features() {
                     </span>
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-slate-900 font-bold text-lg mb-2 tracking-tight group-hover:translate-x-1 transition-transform duration-500">
+                    <h3 className="text-slate-900 font-extrabold text-lg mb-2 tracking-tight group-hover:translate-x-1 transition-transform duration-500">
                       {card.title}
                     </h3>
-                    <p className="text-slate-400 text-sm leading-relaxed group-hover:text-slate-500 transition-colors duration-500">
+                    <p className="text-slate-700 text-sm leading-relaxed font-semibold group-hover:text-slate-800 transition-colors duration-500">
                       {card.desc}
                     </p>
                   </div>

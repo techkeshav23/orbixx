@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
+import { WHATSAPP_URL } from "@/lib/constants";
+
 export default function Hero({
   onSeeResults,
-  onSpinWheel,
 }: {
   onSeeResults: () => void;
-  onSpinWheel: () => void;
 }) {
   const [mounted, setMounted] = useState(false);
   const [heroPhase, setHeroPhase] = useState(-1);
@@ -103,9 +103,10 @@ export default function Hero({
             onMouseLeave={() => setBtnTransform("")}
             className="magnetic-wrap"
           >
-            <button
-              ref={btnRef as React.RefObject<HTMLButtonElement>}
-              onClick={onSpinWheel}
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-10 py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
               style={{ transform: btnTransform }}
             >
@@ -123,7 +124,7 @@ export default function Hero({
                   d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
                 />
               </svg>
-            </button>
+            </a>
           </div>
           <div className="relative group/see">
             <button
