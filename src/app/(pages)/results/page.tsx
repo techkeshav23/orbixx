@@ -276,7 +276,7 @@ export default function ResultsPage() {
               href="/pricing"
               className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md"
             >
-              Start Free Trial
+              BOOK NOW
               <svg
                 className="w-4 h-4"
                 fill="none"

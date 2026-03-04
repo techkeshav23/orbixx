@@ -232,4 +232,26 @@ html, body {
   to   { transform: scaleX(1); opacity: 1; }
 }
 
+/* ===== SEE RESULTS attention animation ===== */
+
+/* "Click here!" label bounce */
+.click-here-bounce {
+  animation: click-bounce 2s ease-in-out 2s infinite;
+}
+@keyframes click-bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+  50% { transform: translateY(0); }
+  70% { transform: translateY(-3px); }
+}
+
+/* Ripple ping expanding outward from button */
+.see-ping {
+  animation: see-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes see-ping {
+  0% { transform: scale(1); opacity: 0.6; }
+  75%, 100% { transform: scale(1.25); opacity: 0; }
+}
+
 

@@ -55,8 +55,8 @@ export default function Hero({
         {/* Main headline — Cinematic Pullback */}
         <div className="mb-8">
           {[
-            { text: "DANCE.", color: "#FF6B4A", idx: 0 },
-            { text: "SWEAT.", color: "#EC4899", idx: 1 },
+            { text: "DANCE", color: "#FF6B4A", idx: 0 },
+            { text: "SWEAT", color: "#EC4899", idx: 1 },
             { text: "GLOW.", color: "#14B8A6", idx: 2 },
           ].map((w) => (
             <span
@@ -91,7 +91,7 @@ export default function Hero({
 
         {/* CTA group */}
         <div
-          className={`flex flex-col sm:flex-row gap-5 mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`flex flex-col items-center sm:items-start sm:flex-row gap-5 mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             heroPhase >= 3
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-6"
@@ -109,7 +109,7 @@ export default function Hero({
               className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-10 py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
               style={{ transform: btnTransform }}
             >
-              <span>START FREE TRIAL</span>
+              <span>BOOK NOW</span>
               <svg
                 className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                 fill="none"
@@ -125,15 +125,23 @@ export default function Hero({
               </svg>
             </button>
           </div>
-          <button
-            onClick={onSeeResults}
-            className="inline-flex items-center gap-3 text-[#FF6B4A] hover:text-white px-8 py-5 rounded-full font-bold text-sm transition-all duration-300 border-2 border-[#FF6B4A] hover:bg-gradient-to-r hover:from-[#FF6B4A] hover:to-[#EC4899] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.2)]"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            SEE RESULTS
-          </button>
+          <div className="relative group/see">
+            <button
+              onClick={onSeeResults}
+              className="relative inline-flex items-center gap-3 text-[#FF6B4A] hover:text-white px-8 py-5 rounded-full font-bold text-sm transition-all duration-300 border-2 border-[#FF6B4A] hover:bg-gradient-to-r hover:from-[#FF6B4A] hover:to-[#EC4899] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.2)] overflow-visible"
+            >
+              {/* Ripple ping rings */}
+              <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
+              <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/20 see-ping" style={{ animationDelay: "0.8s" }} />
+
+              <span className="text-lg animate-bounce" role="img" aria-label="point right">&#x1F449;</span>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              SEE RESULTS
+              <span className="text-lg animate-bounce" role="img" aria-label="point left">&#x1F448;</span>
+            </button>
+          </div>
         </div>
 
         {/* Bottom stats with stagger */}

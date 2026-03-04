@@ -1,10 +1,18 @@
 export const WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917451874271";
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 export const PHONE_TEL = `tel:+${WHATSAPP_NUMBER}`;
 export const PHONE_DISPLAY =
-  process.env.NEXT_PUBLIC_PHONE_DISPLAY || "+91 7451874271";
+  process.env.NEXT_PUBLIC_PHONE_DISPLAY || "";
+
+// Social Media Links
+export const INSTAGRAM_URL =
+  process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com";
+export const FACEBOOK_URL =
+  process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://facebook.com";
+export const YOUTUBE_URL =
+  process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://youtube.com";
 
 export const carouselImages = [
   { src: "/transformations/priya.jpg", name: "Priya S.", result: "-15 kg" },
