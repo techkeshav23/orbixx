@@ -101,7 +101,7 @@ const transformations = [
   },
 ];
 
-/* ── SVG Sparkline helper ── */
+// sparkline svg
 function Sparkline({ data, color = "#FF6B4A" }: { data: number[]; color?: string }) {
   const w = 140;
   const h = 40;
@@ -152,7 +152,7 @@ function Sparkline({ data, color = "#FF6B4A" }: { data: number[]; color?: string
   );
 }
 
-/* ── Animated progress bar ── */
+// progress bar
 function ProgressBar({ value, label, color }: { value: number; label: string; color: string }) {
   return (
     <div className="flex items-center gap-2">
@@ -197,7 +197,7 @@ function TransformationCard({
         </div>
       </div>
 
-      {/* ── Journey Graph ── */}
+      {/* Journey graph */}
       <div className="px-4 pt-4 pb-2 border-b border-slate-50">
         {/* Weight loss sparkline */}
         <div className="mb-2.5">

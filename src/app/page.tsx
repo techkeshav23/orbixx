@@ -5,9 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 
-/* ════════════════════════════════════════════
-   HOOKS
-   ════════════════════════════════════════════ */
+// hooks
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -48,9 +46,7 @@ function useTextScramble(text: string, trigger: boolean, duration = 1200) {
   return display;
 }
 
-/* ════════════════════════════════════════════
-   3D CAROUSEL POPUP
-   ════════════════════════════════════════════ */
+// 3d carousel popup
 const carouselImages = [
   { src: "/transformations/priya.jpg", name: "Priya S.", result: "-15 kg" },
   { src: "/transformations/ananya.jpg", name: "Ananya R.", result: "-10 kg" },
@@ -63,89 +59,121 @@ const carouselImages = [
 ];
 
 function Carousel3D({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [angle, setAngle] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const [autoRotate, setAutoRotate] = useState(true);
+  const [, forceRender] = useState(0);
+  const angleRef = useRef(0);
+  const draggingRef = useRef(false);
+  const autoRotateRef = useRef(true);
   const lastX = useRef(0);
   const velocity = useRef(0);
   const animFrame = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const count = carouselImages.length;
   const step = 360 / count;
 
-  // Auto-rotate
-  useEffect(() => {
-    if (!open || !autoRotate) return;
-    const id = setInterval(() => setAngle(a => a - 0.3), 16);
-    return () => clearInterval(id);
-  }, [open, autoRotate]);
+  // Apply angle directly to DOM (no re-render needed)
+  const applyAngle = useCallback(() => {
+    if (innerRef.current) {
+      innerRef.current.style.transform = `rotateY(${angleRef.current}deg)`;
+    }
+  }, []);
 
-  // Momentum deceleration
+  // Auto-rotate loop using rAF
   useEffect(() => {
-    if (!open || dragging) return;
+    if (!open) return;
     let running = true;
     const tick = () => {
       if (!running) return;
+      if (autoRotateRef.current && !draggingRef.current) {
+        angleRef.current -= 0.12;
+        applyAngle();
+      }
+      requestAnimationFrame(tick);
+    };
+    animFrame.current = requestAnimationFrame(tick);
+    return () => { running = false; cancelAnimationFrame(animFrame.current); };
+  }, [open, applyAngle]);
+
+  // Momentum deceleration after drag ends
+  const startMomentum = useCallback(() => {
+    const decel = () => {
+      if (draggingRef.current) return;
       if (Math.abs(velocity.current) > 0.05) {
         velocity.current *= 0.95;
-        setAngle(a => a + velocity.current);
-        animFrame.current = requestAnimationFrame(tick);
+        angleRef.current += velocity.current;
+        applyAngle();
+        requestAnimationFrame(decel);
       } else {
         velocity.current = 0;
-        // Resume auto-rotate after momentum stops
-        setTimeout(() => setAutoRotate(true), 2000);
+        setTimeout(() => { autoRotateRef.current = true; }, 2000);
       }
     };
-    if (Math.abs(velocity.current) > 0.05) {
-      animFrame.current = requestAnimationFrame(tick);
-    }
-    return () => { running = false; cancelAnimationFrame(animFrame.current); };
-  }, [open, dragging]);
+    requestAnimationFrame(decel);
+  }, [applyAngle]);
 
   // Lock body scroll when open
   useEffect(() => {
-    if (open) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
+    if (open) {
+      document.body.style.overflow = "hidden";
+      angleRef.current = 0;
+      velocity.current = 0;
+      autoRotateRef.current = true;
+      draggingRef.current = false;
+      forceRender(n => n + 1);
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    setDragging(true);
-    setAutoRotate(false);
+    draggingRef.current = true;
+    autoRotateRef.current = false;
     velocity.current = 0;
     lastX.current = e.clientX;
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    containerRef.current?.setPointerCapture(e.pointerId);
+    if (innerRef.current) innerRef.current.style.transition = "none";
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
     const dx = e.clientX - lastX.current;
     velocity.current = dx * 0.4;
-    setAngle(a => a + dx * 0.4);
+    angleRef.current += dx * 0.4;
+    applyAngle();
     lastX.current = e.clientX;
   };
 
   const handlePointerUp = () => {
-    setDragging(false);
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    if (innerRef.current) innerRef.current.style.transition = "";
+    startMomentum();
   };
 
   // Touch support for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
-    setAutoRotate(false);
-    setDragging(true);
+    draggingRef.current = true;
+    autoRotateRef.current = false;
     velocity.current = 0;
     lastX.current = e.touches[0].clientX;
+    if (innerRef.current) innerRef.current.style.transition = "none";
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
     const dx = e.touches[0].clientX - lastX.current;
     velocity.current = dx * 0.4;
-    setAngle(a => a + dx * 0.4);
+    angleRef.current += dx * 0.4;
+    applyAngle();
     lastX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = () => {
-    setDragging(false);
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    if (innerRef.current) innerRef.current.style.transition = "";
+    startMomentum();
   };
 
   if (!open) return null;
@@ -180,7 +208,8 @@ function Carousel3D({ open, onClose }: { open: boolean; onClose: () => void }) {
 
       {/* 3D Carousel container */}
       <div
-        className="relative z-[105] select-none w-full h-[400px] sm:h-[450px] flex items-center justify-center"
+        ref={containerRef}
+        className="relative z-[105] select-none w-full h-[400px] sm:h-[450px] flex items-center justify-center touch-none"
         style={{ perspective: "1000px" }}
         onClick={e => e.stopPropagation()}
         onPointerDown={handlePointerDown}
@@ -192,13 +221,13 @@ function Carousel3D({ open, onClose }: { open: boolean; onClose: () => void }) {
         onTouchEnd={handleTouchEnd}
       >
         <div
+          ref={innerRef}
           className="relative"
           style={{
             width: "180px",
             height: "240px",
             transformStyle: "preserve-3d",
-            transform: `rotateY(${angle}deg)`,
-            transition: dragging ? "none" : "transform 0.05s linear",
+            transform: `rotateY(0deg)`,
           }}
         >
           {carouselImages.map((img, i) => {
@@ -247,20 +276,29 @@ function Carousel3D({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 1 — HERO
-   Light bg + text scramble + magnetic btn
-   ════════════════════════════════════════════ */
+// hero
 function Hero({ onSeeResults, onSpinWheel }: { onSeeResults: () => void; onSpinWheel: () => void }) {
   const [mounted, setMounted] = useState(false);
+  const [heroPhase, setHeroPhase] = useState(-1);
   const btnRef = useRef<HTMLButtonElement>(null);
   const [btnTransform, setBtnTransform] = useState("");
-  const scrambledTitle = useTextScramble("DANCE. SWEAT. GLOW.", mounted, 1500);
 
   useEffect(() => { 
     const t = setTimeout(() => setMounted(true), 300);
     return () => clearTimeout(t);
   }, []);
+
+  /* Cinematic Pullback sequence — fires once after mount */
+  useEffect(() => {
+    if (!mounted) return;
+    const timers = [
+      setTimeout(() => setHeroPhase(0), 200),
+      setTimeout(() => setHeroPhase(1), 900),
+      setTimeout(() => setHeroPhase(2), 1600),
+      setTimeout(() => setHeroPhase(3), 2300),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [mounted]);
 
   /* Magnetic button effect */
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -282,34 +320,40 @@ function Hero({ onSeeResults, onSpinWheel }: { onSeeResults: () => void; onSpinW
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
-        {/* Top tag */}
-        <div className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-          <div className="inline-flex items-center gap-3 border border-slate-200 rounded-full px-5 py-2.5 mb-10 backdrop-blur-sm bg-white/80">
-            <span className="live-dot w-2 h-2 rounded-full bg-[#FF6B4A]" />
-            <span className="text-slate-500 text-xs font-mono tracking-wider uppercase">250+ women training right now</span>
-          </div>
+
+        {/* Main headline — Cinematic Pullback */}
+        <div className="mb-8">
+          {[
+            { text: "DANCE.", color: "#FF6B4A", idx: 0 },
+            { text: "SWEAT.", color: "#EC4899", idx: 1 },
+            { text: "GLOW.",  color: "#14B8A6", idx: 2 },
+          ].map((w) => (
+            <span
+              key={w.text}
+              className={`block font-mono text-[clamp(2.5rem,8vw,7rem)] font-black leading-[0.95] tracking-tighter ${
+                heroPhase >= w.idx ? "cine-pullback" : "opacity-0"
+              }`}
+              style={{ color: w.color }}
+            >{w.text}</span>
+          ))}
+          <div
+            className={`h-[3px] w-40 mt-4 rounded-full bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] origin-left ${
+              heroPhase >= 3 ? "cine-wipe" : "opacity-0 scale-x-0"
+            }`}
+          />
         </div>
 
-        {/* Main headline with scramble */}
-        <h1 className={`font-mono text-[clamp(2.5rem,8vw,7rem)] font-black leading-[0.9] tracking-tighter mb-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          style={{ transitionDelay: "200ms" }}
-        >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]">
-            {scrambledTitle}
-          </span>
-        </h1>
-
         {/* Sub text */}
-        <p className={`text-slate-500 text-lg sm:text-xl max-w-xl leading-relaxed mb-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-          style={{ transitionDelay: "500ms" }}
+        <p className={`text-slate-500 text-lg sm:text-xl max-w-xl leading-relaxed mb-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroPhase >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          style={{ transitionDelay: "200ms" }}
         >
           India&apos;s highest-rated online Zumba platform. 
           Exclusively for women. No equipment. No excuses.
         </p>
 
         {/* CTA group */}
-        <div className={`flex flex-col sm:flex-row gap-5 mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-          style={{ transitionDelay: "700ms" }}
+        <div className={`flex flex-col sm:flex-row gap-5 mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroPhase >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          style={{ transitionDelay: "400ms" }}
         >
           <div 
             onMouseMove={handleMouseMove} 
@@ -347,8 +391,8 @@ function Hero({ onSeeResults, onSpinWheel }: { onSeeResults: () => void; onSpinW
           ].map((stat, i) => (
             <div
               key={i}
-              className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-              style={{ transitionDelay: `${900 + i * 100}ms` }}
+              className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${heroPhase >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+              style={{ transitionDelay: `${600 + i * 100}ms` }}
             >
               <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">{stat.val}</div>
               <div className="text-slate-400 text-xs mt-1 tracking-wider uppercase">{stat.label}</div>
@@ -360,54 +404,89 @@ function Hero({ onSeeResults, onSpinWheel }: { onSeeResults: () => void; onSpinW
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 2 — INFINITE MARQUEE
-   ════════════════════════════════════════════ */
+
+
+// marquee
 function Marquee() {
-  const words = ["ZUMBA", "YOGA", "STRENGTH", "DANCE", "CARDIO", "HIIT", "WELLNESS"];
+  const words = ["ZUMBA", "YOGA", "STRENGTH", "DANCE", "CARDIO", "HIIT", "WELLNESS", "FIT", "ENERGY", "POWER", "BURN", "GLOW", "SWEAT", "FLEX"];
+  const renderSet = (setKey: number) => (
+    <div key={setKey} className="flex items-center shrink-0" aria-hidden={setKey > 0 ? "true" : undefined}>
+      {words.map((w, i) => (
+        <span key={`${setKey}-${i}`} className="flex items-center gap-3 mx-3 sm:mx-4">
+          <span className={`text-2xl sm:text-4xl font-black tracking-tight ${
+            i % 2 === 0 
+              ? "text-transparent [-webkit-text-stroke:1.5px_rgba(255,107,74,0.6)]" 
+              : "text-slate-300"
+          }`}>
+            {w}
+          </span>
+          <span className="text-[#FF6B4A]/40 text-lg">◈</span>
+        </span>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="bg-slate-50 border-y border-slate-100 py-8 overflow-hidden">
+    <div className="bg-slate-50 border-y border-slate-100 py-6 overflow-hidden">
       <div className="marquee-track flex whitespace-nowrap">
-        {[0, 1, 2].map(set => (
-          <div key={set} className="flex items-center shrink-0">
-            {words.map((w, i) => (
-              <span key={`${set}-${i}`} className="flex items-center mx-6">
-                <span className={`text-3xl sm:text-5xl font-black tracking-tight ${
-                  i % 2 === 0 
-                    ? "text-transparent [-webkit-text-stroke:1px_rgba(255,107,74,0.35)]" 
-                    : "text-slate-200"
-                }`}>
-                  {w}
-                </span>
-                <span className="text-[#FF6B4A]/25 mx-6 text-xl">◈</span>
-              </span>
-            ))}
-          </div>
-        ))}
+        {renderSet(0)}
+        {renderSet(1)}
       </div>
     </div>
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 3 — FEATURES
-   ════════════════════════════════════════════ */
+// features grid
 function Features() {
-  const { ref, inView } = useInView();
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const [cardsVisible, setCardsVisible] = useState(false);
+  const { ref: headerRef, inView: headerVisible } = useInView(0.1);
+
+  /* Observe the cards grid container directly with a low threshold + rootMargin 
+     so it fires when the grid is about to enter the viewport */
+  useEffect(() => {
+    const el = cardsRef.current;
+    if (!el) return;
+    const ob = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setCardsVisible(true); ob.disconnect(); } },
+      { threshold: 0.05, rootMargin: "0px 0px -60px 0px" }
+    );
+    ob.observe(el);
+    return () => ob.disconnect();
+  }, []);
+
   const cards = [
-    { num: "01", title: "Live Sessions", desc: "Real-time classes with trainers who see you, correct your form, and push your limits.", color: "#FF6B4A" },
-    { num: "02", title: "Women Only", desc: "Private, judgment-free space. Dance like nobody\u2019s watching \u2014 because they aren\u2019t.", color: "#EC4899" },
-    { num: "03", title: "Any Device", desc: "Phone, tablet, laptop. Join from your bedroom, terrace, or while traveling.", color: "#14B8A6" },
-    { num: "04", title: "All Levels", desc: "Whether you\u2019ve never exercised or you\u2019re a fitness junkie \u2014 we\u2019ve got your class.", color: "#FF6B4A" },
-    { num: "05", title: "Flexible Timing", desc: "Classes from 6 AM to 10 PM. Miss a live session? Recordings available 24/7.", color: "#EC4899" },
-    { num: "06", title: "Expert Trainers", desc: "Certified, experienced, and passionate. 50+ trainers across different styles.", color: "#14B8A6" },
+    { num: "01", title: "Live Sessions", desc: "Real-time classes with trainers who see you, correct your form, and push your limits.", color: "#FF6B4A", icon: "🎥" },
+    { num: "02", title: "Women Only", desc: "Private, judgment-free space. Dance like nobody\u2019s watching \u2014 because they aren\u2019t.", color: "#EC4899", icon: "👑" },
+    { num: "03", title: "Any Device", desc: "Phone, tablet, laptop. Join from your bedroom, terrace, or while traveling.", color: "#14B8A6", icon: "📱" },
+    { num: "04", title: "All Levels", desc: "Whether you\u2019ve never exercised or you\u2019re a fitness junkie \u2014 we\u2019ve got your class.", color: "#FF6B4A", icon: "🎯" },
+    { num: "05", title: "Flexible Timing", desc: "Classes from 6 AM to 10 PM. Miss a live session? Recordings available 24/7.", color: "#EC4899", icon: "⏰" },
+    { num: "06", title: "Expert Trainers", desc: "Certified, experienced, and passionate. 50+ trainers across different styles.", color: "#14B8A6", icon: "💪" },
   ];
 
+  /* Spread-from-center: inline style includes both transition AND transform/opacity
+     so the browser can interpolate between states properly */
+  const getSpreadStyle = (i: number): React.CSSProperties => {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const colOffset = col - 1;
+    const rowOffset = row === 0 ? -1 : 1;
+    const delay = 200 + Math.abs(colOffset) * 150 + row * 120;
+
+    return {
+      transition: `transform 900ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, opacity 700ms ease ${delay}ms`,
+      transform: cardsVisible
+        ? 'translate3d(0, 0, 0) scale(1)'
+        : `translate3d(${colOffset * -60}px, ${rowOffset * -40}px, 0) scale(0.85)`,
+      opacity: cardsVisible ? 1 : 0,
+    };
+  };
+
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-white">
+    <section className="py-24 md:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className={`max-w-2xl mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+        {/* Header — centered */}
+        <div ref={headerRef as React.RefObject<HTMLDivElement>} className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <span className="text-[#FF6B4A] text-xs font-mono tracking-[0.3em] uppercase block mb-4">// WHAT WE OFFER</span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.05] tracking-tight">
             Not another fitness app.
@@ -416,30 +495,57 @@ function Features() {
           </h2>
         </div>
 
-        {/* Cards grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Cards grid — spread from center */}
+        <div ref={cardsRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map((card, i) => (
             <div
               key={i}
-              className={`group relative rounded-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${200 + i * 100}ms` }}
+              className="group relative will-change-transform"
+              style={getSpreadStyle(i)}
             >
-              <div className="relative bg-white rounded-2xl p-7 h-full border border-slate-100 hover:border-slate-200 transition-all duration-500 hover:shadow-lg overflow-hidden">
-                {/* Hover glow */}
-                <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-10 transition-opacity duration-700" 
-                  style={{ background: card.color }} 
+              <div className="relative rounded-2xl p-[1px] overflow-hidden h-full">
+                {/* Animated gradient border on hover */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: `linear-gradient(135deg, ${card.color}30, transparent 50%, ${card.color}15)`,
+                  }}
                 />
-                
-                <div className="relative z-10">
-                  <span className="text-5xl font-black font-mono text-slate-100 leading-none block mb-4">{card.num}</span>
-                  <h3 className="text-slate-900 font-bold text-lg mb-3">{card.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{card.desc}</p>
-                </div>
 
-                {/* Bottom line */}
-                <div className="absolute bottom-0 left-7 right-7 h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent group-hover:via-slate-200 transition-all duration-500" />
+                <div className="relative bg-white rounded-2xl p-7 sm:p-8 h-full overflow-hidden border border-slate-100 group-hover:border-transparent transition-colors duration-500">
+                  {/* Corner glow */}
+                  <div
+                    className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[60px] opacity-0 group-hover:opacity-15 transition-all duration-700"
+                    style={{ background: card.color }}
+                  />
+
+                  {/* Top row: icon + number */}
+                  <div className="relative z-10 flex items-start justify-between mb-5">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-4deg]"
+                      style={{ background: `${card.color}12` }}
+                    >
+                      {card.icon}
+                    </div>
+                    <span
+                      className="text-3xl font-black font-mono leading-none"
+                      style={{ color: `${card.color}18` }}
+                    >
+                      {card.num}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <h3 className="text-slate-900 font-bold text-lg mb-2 tracking-tight group-hover:translate-x-1 transition-transform duration-500">{card.title}</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed group-hover:text-slate-500 transition-colors duration-500">{card.desc}</p>
+                  </div>
+
+                  {/* Bottom accent line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[2px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    style={{ background: `linear-gradient(90deg, ${card.color}, transparent)` }}
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -449,9 +555,7 @@ function Features() {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 4 — ABOUT / SPLIT 
-   ════════════════════════════════════════════ */
+// about split
 function About() {
   const { ref, inView } = useInView();
 
@@ -462,25 +566,75 @@ function About() {
           {/* Left — Visual */}
           <div className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}>
             <div className="relative">
-              {/* Main visual */}
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden relative bg-gradient-to-br from-[#FF6B4A]/[0.08] via-[#EC4899]/[0.04] to-transparent border border-slate-200">
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-10">
-                  <div className="relative w-full max-w-[280px]">
-                    {/* Animated ring */}
-                    <div className="ring-spin absolute inset-0 rounded-full border-2 border-dashed border-[#FF6B4A]/20" />
-                    <div className="aspect-square rounded-full bg-gradient-to-br from-[#FF6B4A]/15 to-[#EC4899]/15 flex items-center justify-center border border-slate-200">
-                      <div className="text-center">
-                        <div className="text-6xl sm:text-7xl font-black font-mono text-slate-800 leading-none">45</div>
-                        <div className="text-slate-400 text-xs tracking-[0.2em] uppercase mt-2">min/session</div>
-                      </div>
+              {/* Main visual — session dashboard (light) */}
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden relative bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200 shadow-sm">
+                {/* Ambient glow blobs */}
+                <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-[#FF6B4A]/[0.07] rounded-full blur-[80px]" />
+                <div className="absolute bottom-10 left-10 w-[180px] h-[180px] bg-[#14B8A6]/[0.06] rounded-full blur-[80px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] bg-[#EC4899]/[0.05] rounded-full blur-[60px]" />
+
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                  
+                  {/* Animated circular progress ring */}
+                  <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+                    {/* Outer track */}
+                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 200 200">
+                      <circle cx="100" cy="100" r="88" fill="none" stroke="#e2e8f0" strokeWidth="6" />
+                      {/* Animated progress arc — 75% of circle */}
+                      <circle
+                        cx="100" cy="100" r="88"
+                        fill="none"
+                        stroke="url(#progressGrad)"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeDasharray="553"
+                        style={{
+                          strokeDashoffset: inView ? "138" : "553",
+                          transition: "stroke-dashoffset 2s cubic-bezier(0.16,1,0.3,1) 0.5s",
+                        }}
+                      />
+                      <defs>
+                        <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#FF6B4A" />
+                          <stop offset="50%" stopColor="#EC4899" />
+                          <stop offset="100%" stopColor="#14B8A6" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    {/* Inner spinning dashed ring */}
+                    <div className="absolute inset-4 rounded-full border border-dashed border-slate-200 ring-spin" />
+                    {/* Center content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-5xl sm:text-6xl font-black font-mono text-slate-900 leading-none">45</span>
+                      <span className="text-slate-400 text-[10px] tracking-[0.25em] uppercase mt-1.5 font-mono">min / session</span>
                     </div>
                   </div>
-                  
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mt-10 justify-center">
-                    {["High Energy", "Beginner Friendly", "Music-Driven", "Zero Equipment"].map((tag, i) => (
-                      <span key={i} className="text-slate-500 text-xs border border-slate-200 rounded-full px-4 py-1.5 bg-white/80">{tag}</span>
+
+                  {/* Live session stats row */}
+                  <div className={`flex items-center gap-6 mt-8 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "800ms" }}>
+                    {[
+                      { val: "500+", unit: "cal burn", color: "#FF6B4A" },
+                      { val: "140", unit: "avg BPM", color: "#EC4899" },
+                      { val: "92%", unit: "fun rate", color: "#14B8A6" },
+                    ].map((s, i) => (
+                      <div key={i} className="text-center">
+                        <div className="font-black font-mono text-lg sm:text-xl leading-none" style={{ color: s.color }}>{s.val}</div>
+                        <div className="text-slate-400 text-[9px] tracking-[0.15em] uppercase mt-1">{s.unit}</div>
+                      </div>
                     ))}
+                  </div>
+
+                  {/* Tags */}
+                  <div className={`flex flex-wrap gap-2 mt-8 justify-center transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "1100ms" }}>
+                    {["High Energy", "Beginner Friendly", "Music-Driven", "Zero Equipment"].map((tag, i) => (
+                      <span key={i} className="text-slate-500 text-[10px] border border-slate-200 rounded-full px-3.5 py-1.5 bg-white tracking-wider uppercase">{tag}</span>
+                    ))}
+                  </div>
+
+                  {/* Live indicator */}
+                  <div className={`flex items-center gap-2 mt-6 transition-all duration-700 ${inView ? "opacity-100" : "opacity-0"}`} style={{ transitionDelay: "1400ms" }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B4A] live-dot" />
+                    <span className="text-slate-400 text-[9px] font-mono tracking-[0.2em] uppercase">3 classes live now</span>
                   </div>
                 </div>
               </div>
@@ -545,9 +699,7 @@ function About() {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 5 — STATS (Number Scramble)
-   ════════════════════════════════════════════ */
+// stats
 function Stats() {
   const { ref, inView } = useInView(0.3);
   const stat1 = useTextScramble("10,000+", inView, 1000);
@@ -588,9 +740,7 @@ function Stats() {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 6 — TESTIMONIALS
-   ════════════════════════════════════════════ */
+// testimonials
 function Testimonials() {
   const { ref, inView } = useInView();
   const stories = [
@@ -674,9 +824,7 @@ function Testimonials() {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 7 — CLASS SCHEDULE PREVIEW
-   ════════════════════════════════════════════ */
+// schedule
 function Schedule() {
   const { ref, inView } = useInView();
   const classes = [
@@ -749,62 +897,7 @@ function Schedule() {
   );
 }
 
-/* ════════════════════════════════════════════
-   SECTION 8 — CTA
-   ════════════════════════════════════════════ */
-function FinalCTA() {
-  const { ref, inView } = useInView();
-  
-  return (
-    <section ref={ref} className="relative py-28 md:py-36 overflow-hidden bg-slate-50">
-      {/* Soft gradient accents */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-[#FF6B4A]/[0.05] rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-[#14B8A6]/[0.04] rounded-full blur-[100px]" />
-      </div>
-      
-      <div className="relative z-10 max-w-3xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
-        <div className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${inView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"}`}>
-          <span className="text-[#FF6B4A] text-xs font-mono tracking-[0.3em] uppercase block mb-6">// YOUR MOVE</span>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1] tracking-tight mb-6">
-            STOP THINKING.
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]">
-              START MOVING.
-            </span>
-          </h2>
-          <p className="text-slate-500 text-lg mb-12 max-w-lg mx-auto">
-            7-day free trial. Cancel anytime. No card needed. 
-            10,000+ women already made the choice.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/pricing"
-              className="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-12 py-5 rounded-full font-bold text-base transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] hover:scale-105"
-            >
-              START FREE TRIAL
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-              </svg>
-            </Link>
-            <a
-              href="https://wa.me/917451874271"
-              target="_blank"
-              className="inline-flex items-center justify-center gap-3 border border-slate-200 text-slate-500 hover:text-slate-700 hover:border-slate-300 px-10 py-5 rounded-full font-medium text-base transition-all duration-300 hover:bg-white"
-            >
-              WhatsApp Us
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ════════════════════════════════════════════
-   OFFER COUNTDOWN BANNER (top of page)
-   ════════════════════════════════════════════ */
+// offer banner with countdown
 function OfferBanner({ onClose }: { onClose: () => void }) {
   const [timeLeft, setTimeLeft] = useState({ h: 2, m: 0, s: 0 });
 
@@ -859,9 +952,7 @@ function OfferBanner({ onClose }: { onClose: () => void }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   FREE CLASS LEAD CAPTURE POPUP (3s delay)
-   ════════════════════════════════════════════ */
+// free class lead popup
 function FreeClassPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -875,9 +966,12 @@ function FreeClassPopup({ open, onClose }: { open: boolean; onClose: () => void 
   }, [open]);
 
   const handleSubmit = () => {
-    if (!name.trim() || !phone.trim()) return;
-    const msg = encodeURIComponent(`Hi! I'm ${name}. I'd like to book my FREE Zumba class! My number: ${phone}`);
-    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank");
+    const trimmedName = name.trim().slice(0, 50);
+    const trimmedPhone = phone.trim();
+    if (!trimmedName || !/^[0-9]{10}$/.test(trimmedPhone)) return;
+    const safeName = trimmedName.replace(/[^\w\s]/gi, '');
+    const msg = encodeURIComponent(`Hi! I'm ${safeName}. I'd like to book my FREE Zumba class! My number: ${trimmedPhone}`);
+    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
 
@@ -956,9 +1050,7 @@ function FreeClassPopup({ open, onClose }: { open: boolean; onClose: () => void 
   );
 }
 
-/* ════════════════════════════════════════════
-   SPIN THE WHEEL POPUP
-   ════════════════════════════════════════════ */
+// spin wheel
 const wheelOffers = [
   { label: "10% OFF", color: "#FF6B4A", emoji: "🏷️" },
   { label: "FREE CLASS", color: "#14B8A6", emoji: "🎉" },
@@ -998,10 +1090,11 @@ function SpinWheel({ open, onClose }: { open: boolean; onClose: () => void }) {
   };
 
   const claimReward = () => {
-    if (!phone.trim() || result === null) return;
+    const trimmedPhone = phone.trim();
+    if (!/^[0-9]{10}$/.test(trimmedPhone) || result === null) return;
     const offer = wheelOffers[result];
-    const msg = encodeURIComponent(`Hi! 🎰 I won "${offer.label}" on the Orbixx Spin Wheel! My number: ${phone}. Please apply my reward!`);
-    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank");
+    const msg = encodeURIComponent(`Hi! I won "${offer.label}" on the Orbixx Spin Wheel! My number: ${trimmedPhone}. Please apply my reward!`);
+    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank", "noopener,noreferrer");
     setClaimed(true);
   };
 
@@ -1139,18 +1232,16 @@ function SpinWheel({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/* ════════════════════════════════════════════
-   MAIN EXPORT
-   ════════════════════════════════════════════ */
+
 export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
   const [showFreeClass, setShowFreeClass] = useState(false);
   const [showSpinWheel, setShowSpinWheel] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
 
-  // Show free class popup after 3 seconds
+  // Show free class popup after 5 seconds
   useEffect(() => {
-    const t = setTimeout(() => setShowFreeClass(true), 3000);
+    const t = setTimeout(() => setShowFreeClass(true), 5000);
     return () => clearTimeout(t);
   }, []);
 
@@ -1164,7 +1255,6 @@ export default function Home() {
       <Stats />
       <Testimonials />
       <Schedule />
-      <FinalCTA />
       <Footer />
       <Carousel3D open={showCarousel} onClose={() => setShowCarousel(false)} />
       <FreeClassPopup open={showFreeClass} onClose={() => setShowFreeClass(false)} />

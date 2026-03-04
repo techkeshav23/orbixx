@@ -17,15 +17,37 @@ const geistMono = Geist_Mono({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   viewportFit: "cover",
   themeColor: "#FF6B4A",
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://orbixxfitness.com"),
   title: "Orbixx Fitness - Online Zumba Classes for Women",
   description:
     "Join our vibrant online Zumba classes designed exclusively for women. Get fit, have fun, and be part of an amazing community—all from home.",
+  openGraph: {
+    title: "Orbixx Fitness - Online Zumba Classes for Women",
+    description:
+      "Join our vibrant online Zumba classes designed exclusively for women. Get fit, have fun, and be part of an amazing community—all from home.",
+    url: "https://orbixxfitness.com",
+    siteName: "Orbixx Fitness",
+    type: "website",
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Orbixx Fitness - Online Zumba Classes for Women",
+    description:
+      "Join our vibrant online Zumba classes designed exclusively for women.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://orbixxfitness.com",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

@@ -35,6 +35,8 @@ export default function Footer() {
                 <a
                   key={social}
                   href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors duration-200"
                   aria-label={social}
                 >
@@ -128,7 +130,7 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-5 pb-24 md:pb-5 text-center">
           <p className="text-slate-500 text-xs">
-            © 2026 Orbixx Fitness. All rights reserved.
+            © {new Date().getFullYear()} Orbixx Fitness. All rights reserved.
           </p>
         </div>
       </div>
