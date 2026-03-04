@@ -251,9 +251,9 @@ function Carousel3D({ open, onClose }: { open: boolean; onClose: () => void }) {
    SECTION 1 — HERO
    Light bg + text scramble + magnetic btn
    ════════════════════════════════════════════ */
-function Hero({ onSeeResults }: { onSeeResults: () => void }) {
+function Hero({ onSeeResults, onSpinWheel }: { onSeeResults: () => void; onSpinWheel: () => void }) {
   const [mounted, setMounted] = useState(false);
-  const btnRef = useRef<HTMLAnchorElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const [btnTransform, setBtnTransform] = useState("");
   const scrambledTitle = useTextScramble("DANCE. SWEAT. GLOW.", mounted, 1500);
 
@@ -316,17 +316,17 @@ function Hero({ onSeeResults }: { onSeeResults: () => void }) {
             onMouseLeave={() => setBtnTransform("")}
             className="magnetic-wrap"
           >
-            <Link
-              ref={btnRef}
-              href="/pricing"
-              className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-10 py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)]"
+            <button
+              ref={btnRef as React.RefObject<HTMLButtonElement>}
+              onClick={onSpinWheel}
+              className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-10 py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
               style={{ transform: btnTransform }}
             >
               <span>START FREE TRIAL</span>
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
               </svg>
-            </Link>
+            </button>
           </div>
           <button
             onClick={onSeeResults}
@@ -803,14 +803,361 @@ function FinalCTA() {
 }
 
 /* ════════════════════════════════════════════
+   OFFER COUNTDOWN BANNER (top of page)
+   ════════════════════════════════════════════ */
+function OfferBanner({ onClose }: { onClose: () => void }) {
+  const [timeLeft, setTimeLeft] = useState({ h: 2, m: 0, s: 0 });
+
+  useEffect(() => {
+    const end = Date.now() + 2 * 60 * 60 * 1000; // 2 hours from now
+    const tick = () => {
+      const diff = Math.max(0, end - Date.now());
+      setTimeLeft({
+        h: Math.floor(diff / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  return (
+    <div className="sticky top-16 lg:top-20 z-[45] bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] text-white overflow-hidden animate-[slideDown_0.4s_ease]">
+      {/* Animated shimmer */}
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_25%,rgba(255,255,255,0.15)_50%,transparent_75%)] animate-[shimmer_2.5s_infinite]" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+        <div className="flex items-center gap-3">
+          <span className="text-xl">🔥</span>
+          <span className="font-bold text-sm sm:text-base">FLAT 40% OFF — First 100 Women Only!</span>
+        </div>
+        
+        {/* Countdown */}
+        <div className="flex items-center gap-1.5 font-mono text-sm">
+          <span className="bg-white/20 backdrop-blur-sm rounded-md px-2 py-1 font-bold">{pad(timeLeft.h)}</span>
+          <span className="font-bold">:</span>
+          <span className="bg-white/20 backdrop-blur-sm rounded-md px-2 py-1 font-bold">{pad(timeLeft.m)}</span>
+          <span className="font-bold">:</span>
+          <span className="bg-white/20 backdrop-blur-sm rounded-md px-2 py-1 font-bold">{pad(timeLeft.s)}</span>
+        </div>
+
+        <Link href="/pricing" className="bg-white text-[#FF6B4A] px-5 py-1.5 rounded-full text-xs font-bold hover:bg-white/90 transition-all hover:scale-105 whitespace-nowrap">
+          CLAIM NOW →
+        </Link>
+
+        <button onClick={onClose} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1" aria-label="Close banner">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   FREE CLASS LEAD CAPTURE POPUP (3s delay)
+   ════════════════════════════════════════════ */
+function FreeClassPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const spotsLeft = 50;
+
+  useEffect(() => {
+    if (open) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  const handleSubmit = () => {
+    if (!name.trim() || !phone.trim()) return;
+    const msg = encodeURIComponent(`Hi! I'm ${name}. I'd like to book my FREE Zumba class! My number: ${phone}`);
+    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank");
+    setSubmitted(true);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.3s_ease]" />
+      
+      <div
+        className="relative z-10 bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)]"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Top gradient strip */}
+        <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]" />
+
+        {/* Close */}
+        <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors" aria-label="Close">
+          <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="p-8 pt-6">
+          {!submitted ? (
+            <>
+              <div className="text-center mb-6">
+                <div className="text-4xl mb-3">🎉</div>
+                <h3 className="text-2xl font-black text-slate-900 mb-2">Get Your FREE Zumba Class!</h3>
+                <p className="text-slate-500 text-sm">Enter your details and we&apos;ll book you in instantly via WhatsApp</p>
+              </div>
+
+              {/* Urgency */}
+              <div className="flex items-center justify-center gap-2 bg-[#FFF1ED] rounded-full px-4 py-2 mb-6">
+                <span className="live-dot w-2 h-2 rounded-full bg-[#FF6B4A]" />
+                <span className="text-[#FF6B4A] text-xs font-bold">Only {spotsLeft} spots left this week!</span>
+              </div>
+
+              {/* Form */}
+              <div className="space-y-3 mb-6">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  className="w-full px-5 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 transition-all placeholder:text-slate-400"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  className="w-full px-5 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 transition-all placeholder:text-slate-400"
+                />
+              </div>
+
+              <button
+                onClick={handleSubmit}
+                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4 rounded-xl font-bold text-sm hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                🎯 BOOK MY FREE CLASS
+              </button>
+
+              <p className="text-slate-300 text-[10px] text-center mt-4">No spam. No card required. Redirects to WhatsApp.</p>
+            </>
+          ) : (
+            <div className="text-center py-6">
+              <div className="text-5xl mb-4">✅</div>
+              <h3 className="text-xl font-black text-slate-900 mb-2">You&apos;re In!</h3>
+              <p className="text-slate-500 text-sm">Complete your booking on WhatsApp. See you in class! 💃</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   SPIN THE WHEEL POPUP
+   ════════════════════════════════════════════ */
+const wheelOffers = [
+  { label: "10% OFF", color: "#FF6B4A", emoji: "🏷️" },
+  { label: "FREE CLASS", color: "#14B8A6", emoji: "🎉" },
+  { label: "FREE WEEK", color: "#EC4899", emoji: "🔥" },
+  { label: "20% OFF", color: "#FF6B4A", emoji: "💰" },
+  { label: "1 MONTH FREE", color: "#14B8A6", emoji: "🏆" },
+  { label: "15% OFF", color: "#EC4899", emoji: "✨" },
+];
+
+function SpinWheel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [spinning, setSpinning] = useState(false);
+  const [result, setResult] = useState<number | null>(null);
+  const [rotation, setRotation] = useState(0);
+  const [phone, setPhone] = useState("");
+  const [claimed, setClaimed] = useState(false);
+  const count = wheelOffers.length;
+  const segAngle = 360 / count;
+
+  useEffect(() => {
+    if (open) { document.body.style.overflow = "hidden"; setResult(null); setSpinning(false); setRotation(0); setClaimed(false); setPhone(""); }
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  const spin = () => {
+    if (spinning) return;
+    setSpinning(true);
+    setResult(null);
+    const winIndex = Math.floor(Math.random() * count);
+    // Spin 5 full rotations + land on winner
+    const targetAngle = 360 * 5 + (360 - winIndex * segAngle - segAngle / 2);
+    setRotation(prev => prev + targetAngle);
+    setTimeout(() => {
+      setSpinning(false);
+      setResult(winIndex);
+    }, 4500);
+  };
+
+  const claimReward = () => {
+    if (!phone.trim() || result === null) return;
+    const offer = wheelOffers[result];
+    const msg = encodeURIComponent(`Hi! 🎰 I won "${offer.label}" on the Orbixx Spin Wheel! My number: ${phone}. Please apply my reward!`);
+    window.open(`https://wa.me/917451874271?text=${msg}`, "_blank");
+    setClaimed(true);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md animate-[fadeIn_0.3s_ease]" />
+
+      <div
+        className="relative z-10 bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)]"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]" />
+
+        <button onClick={onClose} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors" aria-label="Close">
+          <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="p-6 pt-5">
+          <div className="text-center mb-5">
+            <h3 className="text-xl font-black text-slate-900">🎰 Spin & Win!</h3>
+            <p className="text-slate-400 text-xs mt-1">Try your luck — every spin wins!</p>
+          </div>
+
+          {/* Wheel */}
+          <div className="relative mx-auto w-[260px] h-[260px] mb-5">
+            {/* Pointer triangle */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-20">
+              <div className="w-0 h-0 border-l-[12px] border-r-[12px] border-t-[20px] border-l-transparent border-r-transparent border-t-[#FF6B4A] drop-shadow-md" />
+            </div>
+
+            {/* Rotating wheel */}
+            <div
+              className="w-full h-full rounded-full border-4 border-slate-200 overflow-hidden shadow-inner"
+              style={{
+                transform: `rotate(${rotation}deg)`,
+                transition: spinning ? "transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 0.99)" : "none",
+              }}
+            >
+              <svg viewBox="0 0 260 260" className="w-full h-full">
+                {wheelOffers.map((offer, i) => {
+                  const startAngle = i * segAngle;
+                  const endAngle = startAngle + segAngle;
+                  const startRad = (startAngle - 90) * Math.PI / 180;
+                  const endRad = (endAngle - 90) * Math.PI / 180;
+                  const cx = 130, cy = 130, r = 130;
+                  const x1 = cx + r * Math.cos(startRad);
+                  const y1 = cy + r * Math.sin(startRad);
+                  const x2 = cx + r * Math.cos(endRad);
+                  const y2 = cy + r * Math.sin(endRad);
+                  const largeArc = segAngle > 180 ? 1 : 0;
+                  const midAngle = (startAngle + segAngle / 2 - 90) * Math.PI / 180;
+                  const textR = r * 0.62;
+                  const tx = cx + textR * Math.cos(midAngle);
+                  const ty = cy + textR * Math.sin(midAngle);
+                  const textAngle = startAngle + segAngle / 2;
+
+                  const colors = i % 2 === 0 ? "#fff8f6" : "#f0fdfa";
+                  return (
+                    <g key={i}>
+                      <path
+                        d={`M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2} Z`}
+                        fill={colors}
+                        stroke="#e2e8f0"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={tx}
+                        y={ty}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        transform={`rotate(${textAngle}, ${tx}, ${ty})`}
+                        fontSize="11"
+                        fontWeight="800"
+                        fill={offer.color}
+                      >
+                        {offer.emoji} {offer.label}
+                      </text>
+                    </g>
+                  );
+                })}
+                {/* Center circle */}
+                <circle cx="130" cy="130" r="22" fill="white" stroke="#e2e8f0" strokeWidth="2" />
+                <text x="130" y="132" textAnchor="middle" dominantBaseline="middle" fontSize="16">🎯</text>
+              </svg>
+            </div>
+          </div>
+
+          {/* Result / Spin button */}
+          {result === null ? (
+            <button
+              onClick={spin}
+              disabled={spinning}
+              className={`w-full py-4 rounded-xl font-bold text-sm transition-all duration-300 ${
+                spinning
+                  ? "bg-slate-200 text-slate-400 cursor-wait"
+                  : "bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] hover:scale-[1.02] active:scale-[0.98]"
+              }`}
+            >
+              {spinning ? "🎰 Spinning..." : "🎯 SPIN THE WHEEL!"}
+            </button>
+          ) : !claimed ? (
+            <div className="space-y-3 animate-[fadeIn_0.4s_ease]">
+              <div className="text-center bg-[#FFF1ED] rounded-xl p-3">
+                <p className="text-xs text-slate-500">You won</p>
+                <p className="text-lg font-black text-[#FF6B4A]">{wheelOffers[result].emoji} {wheelOffers[result].label}!</p>
+              </div>
+              <input
+                type="tel"
+                placeholder="Enter phone to claim"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                className="w-full px-5 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 transition-all placeholder:text-slate-400"
+              />
+              <button
+                onClick={claimReward}
+                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-3.5 rounded-xl font-bold text-sm hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                🎉 CLAIM ON WHATSAPP
+              </button>
+            </div>
+          ) : (
+            <div className="text-center py-4 animate-[fadeIn_0.4s_ease]">
+              <div className="text-4xl mb-2">🎊</div>
+              <p className="text-slate-900 font-bold">Reward Claimed!</p>
+              <p className="text-slate-400 text-xs mt-1">Complete on WhatsApp to activate.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
    MAIN EXPORT
    ════════════════════════════════════════════ */
 export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
+  const [showFreeClass, setShowFreeClass] = useState(false);
+  const [showSpinWheel, setShowSpinWheel] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
+
+  // Show free class popup after 3 seconds
+  useEffect(() => {
+    const t = setTimeout(() => setShowFreeClass(true), 3000);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <main>
-      <Hero onSeeResults={() => setShowCarousel(true)} />
+      {showBanner && <OfferBanner onClose={() => setShowBanner(false)} />}
+      <Hero onSeeResults={() => setShowCarousel(true)} onSpinWheel={() => setShowSpinWheel(true)} />
       <Marquee />
       <Features />
       <About />
@@ -820,6 +1167,8 @@ export default function Home() {
       <FinalCTA />
       <Footer />
       <Carousel3D open={showCarousel} onClose={() => setShowCarousel(false)} />
+      <FreeClassPopup open={showFreeClass} onClose={() => setShowFreeClass(false)} />
+      <SpinWheel open={showSpinWheel} onClose={() => setShowSpinWheel(false)} />
     </main>
   );
 }
