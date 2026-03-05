@@ -9,10 +9,10 @@ const socialLinks = [
 ];
 
 const quickLinks = [
-  { href: "#home", label: "Home" },
-  { href: "#services", label: "Programs" },
-  { href: "#trainers", label: "Trainers" },
-  { href: "#pricing", label: "Membership" },
+  { href: "/", label: "Home" },
+  { href: "/schedule", label: "Schedule" },
+  { href: "/trainers", label: "Trainers" },
+  { href: "/pricing", label: "Plans" },
 ];
 
 export default function Footer() {
@@ -34,7 +34,8 @@ export default function Footer() {
               <span className="text-base font-bold tracking-wide">ORBIXX FITNESS</span>
             </div>
             <p className="text-slate-400 leading-relaxed mb-6 max-w-xs text-sm">
-              Transform your body. Build your strength. Join thousands of women on their fitness journey.
+              Transform your body. Build your strength.<br />
+              Join thousands of women on their fitness journey.
             </p>
             {/* Social Icons */}
             <div className="flex gap-2.5">
