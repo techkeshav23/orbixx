@@ -134,11 +134,11 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
     img.src = "/logo.png";
 
     img.onload = () => {
-      // Reduce particles on mobile for better FPS
+      // Aggressively reduce particles on mobile for smooth 60fps
       const isMobile = W < 768;
       const NUM = isMobile
-        ? Math.min(800, Math.max(400, Math.round(W * H / 1200)))
-        : Math.min(3000, Math.max(1000, Math.round(W * H / 600)));
+        ? Math.min(300, Math.max(150, Math.round(W * H / 3000)))
+        : Math.min(2000, Math.max(800, Math.round(W * H / 800)));
       const logoPoints = sampleLogoPoints(img, W, H, NUM);
 
       const particles: Particle[] = [];
@@ -153,7 +153,7 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           ty,
           vx: (Math.random() - 0.5) * 4,
           vy: (Math.random() - 0.5) * 4,
-          size: isMobile ? 1.2 + Math.random() * 1.5 : 1 + Math.random() * 1.8,
+          size: isMobile ? 2 + Math.random() * 2 : 1 + Math.random() * 1.8,
           r,
           g,
           b,
@@ -165,6 +165,8 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
       let raf = 0;
       let exploding = false;
       const startTime = performance.now();
+      const cx = W / 2;
+      const cy = H / 2;
 
       // ── TIME-BASED TIMELINE (milliseconds) — same speed on every device ──
       // 0–500ms:      swirl (particles orbit center)
@@ -179,9 +181,6 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
 
       const animate = () => {
         const t = performance.now() - startTime; // elapsed ms
-        // delta-time factor: how many "60fps frames" worth of time passed
-        // This normalizes physics forces regardless of actual FPS
-        const dt = Math.min(3, (performance.now() - startTime - t + 16.67) / 16.67) || 1;
 
         // Clear with slight trail for motion blur during swirl/gather,
         // full clear during hold for crisp logo
@@ -201,15 +200,19 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           setPhase(2);
         }
 
-        for (const p of particles) {
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
           if (exploding) {
-            const explodeT = t - HOLD_END; // ms since explosion started
-            const dx = p.x - W / 2;
-            const dy = p.y - H / 2;
-            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const explodeT = t - HOLD_END;
+            const dx = p.x - cx;
+            const dy = p.y - cy;
+            // Fast inverse distance — avoid sqrt, use dx*dx+dy*dy
+            const distSq = dx * dx + dy * dy;
+            const invDist = distSq > 0 ? 1 / (Math.sqrt(distSq)) : 1;
             const force = Math.min(1.8, (explodeT / 1000) * 0.95);
-            p.vx += (dx / dist) * force + (Math.random() - 0.5) * 0.8;
-            p.vy += (dy / dist) * force + (Math.random() - 0.5) * 0.8;
+            p.vx += dx * invDist * force + (Math.random() - 0.5) * 0.8;
+            p.vy += dy * invDist * force + (Math.random() - 0.5) * 0.8;
             p.vx *= 0.98;
             p.vy *= 0.98;
             p.x += p.vx;
@@ -219,12 +222,10 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           } else if (holdPhase) {
             const dx = p.tx - p.x;
             const dy = p.ty - p.y;
-            p.vx = dx * 0.15;
-            p.vy = dy * 0.15;
-            p.x += p.vx + Math.sin(t * 0.005 + p.tx) * 0.2;
-            p.y += p.vy + Math.cos(t * 0.005 + p.ty) * 0.2;
+            p.x += dx * 0.15 + Math.sin(t * 0.005 + p.tx) * 0.2;
+            p.y += dy * 0.15 + Math.cos(t * 0.005 + p.ty) * 0.2;
           } else if (gatherPhase) {
-            const effectiveT = t - SWIRL_END - p.delay; // ms after this particle's delay
+            const effectiveT = t - SWIRL_END - p.delay;
             if (effectiveT > 0) {
               const dx = p.tx - p.x;
               const dy = p.ty - p.y;
@@ -236,22 +237,24 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
               p.vx *= damp;
               p.vy *= damp;
             } else {
-              const dx = W / 2 - p.x;
-              const dy = H / 2 - p.y;
-              const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-              p.vx += (-dy / dist) * 0.25;
-              p.vy += (dx / dist) * 0.25;
+              const dx = cx - p.x;
+              const dy = cy - p.y;
+              const distSq = dx * dx + dy * dy;
+              const invDist = distSq > 0 ? 1 / Math.sqrt(distSq) : 1;
+              p.vx += -dy * invDist * 0.25;
+              p.vy += dx * invDist * 0.25;
               p.vx *= 0.97;
               p.vy *= 0.97;
             }
             p.x += p.vx;
             p.y += p.vy;
           } else if (swirlPhase) {
-            const dx = W / 2 - p.x;
-            const dy = H / 2 - p.y;
-            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            p.vx += (-dy / dist) * 0.35;
-            p.vy += (dx / dist) * 0.35;
+            const dx = cx - p.x;
+            const dy = cy - p.y;
+            const distSq = dx * dx + dy * dy;
+            const invDist = distSq > 0 ? 1 / Math.sqrt(distSq) : 1;
+            p.vx += -dy * invDist * 0.35;
+            p.vy += dx * invDist * 0.35;
             p.vx += dx * 0.0008;
             p.vy += dy * 0.0008;
             p.vx *= 0.97;
@@ -262,10 +265,11 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
 
           if (p.size < 0.15 || p.a < 0.01) continue;
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, Math.max(0.3, p.size), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${Math.min(1, p.a)})`;
-          ctx.fill();
+          // fillRect is 5-10x faster than beginPath+arc+fill on mobile
+          const s = p.size;
+          const alpha = Math.min(1, p.a);
+          ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${alpha})`;
+          ctx.fillRect(p.x - s, p.y - s, s * 2, s * 2);
         }
 
         // Subtle brand glow pulse while logo is held
