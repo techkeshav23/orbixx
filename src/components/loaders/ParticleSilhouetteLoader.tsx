@@ -134,13 +134,16 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
     img.src = "/logo.png";
 
     img.onload = () => {
-      const NUM = Math.min(3000, Math.max(1000, Math.round(W * H / 600)));
+      // Reduce particles on mobile for better FPS
+      const isMobile = W < 768;
+      const NUM = isMobile
+        ? Math.min(800, Math.max(400, Math.round(W * H / 1200)))
+        : Math.min(3000, Math.max(1000, Math.round(W * H / 600)));
       const logoPoints = sampleLogoPoints(img, W, H, NUM);
 
       const particles: Particle[] = [];
       for (let i = 0; i < logoPoints.length; i++) {
         const [tx, ty, r, g, b, a] = logoPoints[i];
-        // Start at random positions in a ring around center
         const angle = Math.random() * Math.PI * 2;
         const dist = 150 + Math.random() * Math.max(W, H) * 0.45;
         particles.push({
@@ -150,89 +153,89 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           ty,
           vx: (Math.random() - 0.5) * 4,
           vy: (Math.random() - 0.5) * 4,
-          size: 1 + Math.random() * 1.8,
+          size: isMobile ? 1.2 + Math.random() * 1.5 : 1 + Math.random() * 1.8,
           r,
           g,
           b,
           a: a / 255,
-          delay: Math.random() * 25, // stagger so they don't all arrive at once
+          delay: Math.random() * 200, // stagger delay in ms
         });
       }
 
-      let frame = 0;
-      let exploding = false;
       let raf = 0;
+      let exploding = false;
+      const startTime = performance.now();
 
-      // Timeline (at ~60fps):
-      // 0–70:     swirl (particles orbit center)
-      // 70–230:   gather (particles fly to logo positions)
-      // 230–350:  hold (logo visible, particles shimmer — ~2 seconds)
-      // 350:      explode (slow, cinematic)
-      // 520:      done
+      // ── TIME-BASED TIMELINE (milliseconds) — same speed on every device ──
+      // 0–500ms:      swirl (particles orbit center)
+      // 500–1000ms:   gather (particles fly to logo positions) — 0.5s
+      // 1000–1500ms:  hold (logo visible, shimmer) — 0.5s
+      // 1500ms:       explode (cinematic) — 1s
+      // 2500ms:       done
+      const SWIRL_END = 500;
+      const GATHER_END = 1000;
+      const HOLD_END = 1500;
+      const TOTAL = 2500;
 
       const animate = () => {
-        frame++;
+        const t = performance.now() - startTime; // elapsed ms
+        // delta-time factor: how many "60fps frames" worth of time passed
+        // This normalizes physics forces regardless of actual FPS
+        const dt = Math.min(3, (performance.now() - startTime - t + 16.67) / 16.67) || 1;
 
         // Clear with slight trail for motion blur during swirl/gather,
         // full clear during hold for crisp logo
-        if (frame > 230 && !exploding) {
+        if (t > GATHER_END && !exploding) {
           ctx.fillStyle = "rgba(0,0,0,0.35)";
         } else {
           ctx.fillStyle = "rgba(0,0,0,0.14)";
         }
         ctx.fillRect(0, 0, W, H);
 
-        const swirlPhase = frame <= 70;
-        const gatherPhase = frame > 70 && frame < 230;
-        const holdPhase = frame >= 230 && !exploding;
+        const swirlPhase = t <= SWIRL_END;
+        const gatherPhase = t > SWIRL_END && t < GATHER_END;
+        const holdPhase = t >= GATHER_END && !exploding;
 
-        if (frame === 350) {
+        if (t >= HOLD_END && !exploding) {
           exploding = true;
           setPhase(2);
         }
 
         for (const p of particles) {
           if (exploding) {
-            // Slow cinematic explode outward
-            const explodeFrame = frame - 350;
+            const explodeT = t - HOLD_END; // ms since explosion started
             const dx = p.x - W / 2;
             const dy = p.y - H / 2;
             const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            // Gentle initial push that ramps up over time
-            const force = Math.min(1.2, explodeFrame * 0.008);
-            p.vx += (dx / dist) * force + (Math.random() - 0.5) * 0.6;
-            p.vy += (dy / dist) * force + (Math.random() - 0.5) * 0.6;
-            p.vx *= 0.985;
-            p.vy *= 0.985;
+            const force = Math.min(1.8, (explodeT / 1000) * 0.95);
+            p.vx += (dx / dist) * force + (Math.random() - 0.5) * 0.8;
+            p.vy += (dy / dist) * force + (Math.random() - 0.5) * 0.8;
+            p.vx *= 0.98;
+            p.vy *= 0.98;
             p.x += p.vx;
             p.y += p.vy;
-            p.size *= 0.993;
-            p.a *= 0.988;
+            p.size *= 0.988;
+            p.a *= 0.98;
           } else if (holdPhase) {
-            // Gentle shimmer around target position
             const dx = p.tx - p.x;
             const dy = p.ty - p.y;
             p.vx = dx * 0.15;
             p.vy = dy * 0.15;
-            // Tiny breathing motion
-            p.x += p.vx + Math.sin(frame * 0.08 + p.tx) * 0.2;
-            p.y += p.vy + Math.cos(frame * 0.08 + p.ty) * 0.2;
+            p.x += p.vx + Math.sin(t * 0.005 + p.tx) * 0.2;
+            p.y += p.vy + Math.cos(t * 0.005 + p.ty) * 0.2;
           } else if (gatherPhase) {
-            // Gather toward logo position with stagger delay
-            const effectiveFrame = frame - 70 - p.delay;
-            if (effectiveFrame > 0) {
+            const effectiveT = t - SWIRL_END - p.delay; // ms after this particle's delay
+            if (effectiveT > 0) {
               const dx = p.tx - p.x;
               const dy = p.ty - p.y;
-              // Progressive spring — gets stronger as gather continues
-              const progress = Math.min(1, effectiveFrame / 120);
-              const spring = 0.03 + progress * 0.06;
-              const damp = 0.82 - progress * 0.05;
+              const progress = Math.min(1, effectiveT / 1000);
+              const spring = 0.05 + progress * 0.10;
+              const damp = 0.80 - progress * 0.06;
               p.vx += dx * spring;
               p.vy += dy * spring;
               p.vx *= damp;
               p.vy *= damp;
             } else {
-              // Still swirling until delay elapses
               const dx = W / 2 - p.x;
               const dy = H / 2 - p.y;
               const dist = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -244,14 +247,11 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
             p.x += p.vx;
             p.y += p.vy;
           } else if (swirlPhase) {
-            // Clean orbital swirl around center
             const dx = W / 2 - p.x;
             const dy = H / 2 - p.y;
             const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            // Tangential orbital force
             p.vx += (-dy / dist) * 0.35;
             p.vy += (dx / dist) * 0.35;
-            // Gentle inward pull to keep them from flying off
             p.vx += dx * 0.0008;
             p.vy += dy * 0.0008;
             p.vx *= 0.97;
@@ -269,42 +269,40 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
         }
 
         // Subtle brand glow pulse while logo is held
-        if (frame > 250 && frame < 350) {
-          const pulse = Math.sin((frame - 250) * 0.06) * 0.025;
+        if (t > 1100 && t < HOLD_END) {
+          const pulse = Math.sin((t - 1100) * 0.008) * 0.025;
           if (pulse > 0) {
             ctx.fillStyle = `rgba(255,107,74,${pulse})`;
             ctx.fillRect(0, 0, W, H);
           }
         }
 
-        // Company name text — fades in during hold, fades out during explode
-        if (frame > 120) {
+        // Company name text — fades in during gather, holds, fades out during explode
+        if (t > 600) {
           const logoBottomY = H / 2 + Math.min(W, H) * 0.55 * 0.5 * 0.52;
           const textY = logoBottomY + 30;
 
           let textAlpha = 0;
-          if (frame >= 120 && frame < 180) {
-            // Fade in
-            textAlpha = Math.min(1, (frame - 120) / 60);
-          } else if (frame >= 180 && frame <= 350) {
+          if (t >= 600 && t < 1000) {
+            // Fade in during gather phase
+            textAlpha = Math.min(1, (t - 600) / 400);
+          } else if (t >= 1000 && t <= HOLD_END) {
             // Full visible during hold
             textAlpha = 1;
-          } else if (frame > 350 && frame < 440) {
+          } else if (t > HOLD_END && t < HOLD_END + 800) {
             // Fade out during explosion
-            textAlpha = Math.max(0, 1 - (frame - 350) / 90);
+            textAlpha = Math.max(0, 1 - (t - HOLD_END) / 800);
           }
 
           if (textAlpha > 0.01) {
             ctx.save();
             ctx.globalAlpha = textAlpha * 0.9;
 
-            // "ORBIXX" main name
             const fontSize = Math.min(W * 0.07, 42);
             ctx.font = `800 ${fontSize}px system-ui, -apple-system, sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "top";
 
-            // Gradient fill
             const grad = ctx.createLinearGradient(W / 2 - 80, textY, W / 2 + 80, textY);
             grad.addColorStop(0, "#FF6B4A");
             grad.addColorStop(0.5, "#EC4899");
@@ -315,7 +313,6 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
             ctx.fillText("ORBIXX", W / 2, textY);
             ctx.shadowBlur = 0;
 
-            // ".fitness" subtitle
             ctx.globalAlpha = textAlpha * 0.5;
             const subSize = Math.min(W * 0.03, 16);
             ctx.font = `400 ${subSize}px system-ui, -apple-system, sans-serif`;
@@ -327,18 +324,17 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           }
         }
 
-        if (frame < 520) {
+        if (t < TOTAL) {
           raf = requestAnimationFrame(animate);
         } else {
           setPhase(3);
-          setTimeout(() => onComplete?.(), 600);
+          setTimeout(() => onComplete?.(), 400);
         }
       };
 
       setPhase(1);
       raf = requestAnimationFrame(animate);
 
-      // Cleanup stored in a ref-like closure
       const cleanup = () => cancelAnimationFrame(raf);
       (canvas as any).__cleanup = cleanup;
     };
