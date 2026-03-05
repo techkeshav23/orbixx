@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  // Disable source maps in production so source code is never exposed
+  productionBrowserSourceMaps: false,
+  // Prevent exposing internal Next.js build IDs
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
   async headers() {
     return [
       {

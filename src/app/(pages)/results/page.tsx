@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/Footer";
@@ -92,12 +95,180 @@ const transformations = [
     location: "Chennai",
     duration: "3 Months",
     weightLost: "7 kg",
-    image: "/transformations/nisha.jpg",
+    image: "/transformations/nisha.jpeg",
     quote: "The best investment I've ever made in myself.",
     weightJourney: [65, 63, 60, 58],
     stamina: 75,
     consistency: 92,
     energyLevel: 80,
+  },
+  {
+    name: "Pooja V.",
+    location: "Lucknow",
+    duration: "5 Months",
+    weightLost: "11 kg",
+    image: "/transformations/1.jpeg",
+    quote: "I went from breathless climbing stairs to doing 30-min dance sessions!",
+    weightJourney: [76, 74, 71, 68, 66, 65],
+    stamina: 87,
+    consistency: 91,
+    energyLevel: 89,
+  },
+  {
+    name: "Shalini A.",
+    location: "Indore",
+    duration: "4 Months",
+    weightLost: "9 kg",
+    image: "/transformations/2.jpeg",
+    quote: "My husband says I look 10 years younger. Best compliment ever.",
+    weightJourney: [71, 69, 66, 64, 62],
+    stamina: 82,
+    consistency: 88,
+    energyLevel: 86,
+  },
+  {
+    name: "Tanvi R.",
+    location: "Nagpur",
+    duration: "6 Months",
+    weightLost: "16 kg",
+    image: "/transformations/3.jpeg",
+    quote: "From avoiding mirrors to clicking selfies every day. Thank you Orbixx!",
+    weightJourney: [84, 81, 77, 74, 71, 69, 68],
+    stamina: 93,
+    consistency: 96,
+    energyLevel: 94,
+  },
+  {
+    name: "Ishita M.",
+    location: "Kolkata",
+    duration: "3 Months",
+    weightLost: "8 kg",
+    image: "/transformations/4.jpeg",
+    quote: "PCOD, thyroid — nothing stopped me. The trainers kept me going.",
+    weightJourney: [69, 67, 64, 61],
+    stamina: 79,
+    consistency: 93,
+    energyLevel: 83,
+  },
+  {
+    name: "Aarti S.",
+    location: "Chandigarh",
+    duration: "5 Months",
+    weightLost: "13 kg",
+    image: "/transformations/5.jpeg",
+    quote: "I lost weight but gained so much confidence and energy.",
+    weightJourney: [79, 76, 73, 70, 67, 66],
+    stamina: 89,
+    consistency: 85,
+    energyLevel: 91,
+  },
+  {
+    name: "Diya K.",
+    location: "Surat",
+    duration: "4 Months",
+    weightLost: "10 kg",
+    image: "/transformations/6.jpeg",
+    quote: "My morning dance session is my therapy now. Can't imagine skipping it.",
+    weightJourney: [73, 71, 68, 65, 63],
+    stamina: 84,
+    consistency: 90,
+    energyLevel: 87,
+  },
+  {
+    name: "Mansi P.",
+    location: "Ahmedabad",
+    duration: "7 Months",
+    weightLost: "19 kg",
+    image: "/transformations/7.jpeg",
+    quote: "From XXL to M size. My wardrobe is completely new now!",
+    weightJourney: [90, 87, 83, 79, 75, 73, 72, 71],
+    stamina: 97,
+    consistency: 95,
+    energyLevel: 96,
+  },
+  {
+    name: "Neha G.",
+    location: "Bhopal",
+    duration: "3 Months",
+    weightLost: "6 kg",
+    image: "/transformations/8.jpeg",
+    quote: "Even my kids noticed the change. They say 'Mummy looks so happy now!'",
+    weightJourney: [64, 62, 60, 58],
+    stamina: 76,
+    consistency: 89,
+    energyLevel: 81,
+  },
+  {
+    name: "Shruti D.",
+    location: "Kochi",
+    duration: "5 Months",
+    weightLost: "12 kg",
+    image: "/transformations/9.jpeg",
+    quote: "Post-pregnancy weight gone in 5 months. Feeling like myself again.",
+    weightJourney: [77, 74, 71, 68, 66, 65],
+    stamina: 86,
+    consistency: 92,
+    energyLevel: 90,
+  },
+  {
+    name: "Swati N.",
+    location: "Varanasi",
+    duration: "6 Months",
+    weightLost: "15 kg",
+    image: "/transformations/10.jpeg",
+    quote: "Sugar levels normal, BP normal. My doctor is my biggest fan of Orbixx now.",
+    weightJourney: [83, 80, 77, 74, 71, 69, 68],
+    stamina: 90,
+    consistency: 93,
+    energyLevel: 92,
+  },
+  {
+    name: "Radhika J.",
+    location: "Patna",
+    duration: "4 Months",
+    weightLost: "10 kg",
+    image: "/transformations/11.jpeg",
+    quote: "I joined alone, but made 50+ friends in the community. Love this journey!",
+    weightJourney: [74, 72, 69, 66, 64],
+    stamina: 83,
+    consistency: 87,
+    energyLevel: 85,
+  },
+  {
+    name: "Kriti B.",
+    location: "Dehradun",
+    duration: "5 Months",
+    weightLost: "14 kg",
+    image: "/transformations/12.jpeg",
+    quote: "Went from hating exercise to dancing every single morning. Life-changing.",
+    weightJourney: [81, 78, 75, 72, 69, 67],
+    stamina: 91,
+    consistency: 94,
+    energyLevel: 93,
+  },
+  {
+    name: "Anjali T.",
+    location: "Coimbatore",
+    duration: "4 Months",
+    weightLost: "11 kg",
+    image: "/transformations/13.jpeg",
+    quote: "Knee pain vanished, energy doubled. Wish I had started sooner!",
+    weightJourney: [75, 73, 70, 67, 64],
+    stamina: 85,
+    consistency: 91,
+    energyLevel: 88,
+  },
+  {
+    name: "Vidya R.",
+    location: "Vizag",
+    duration: "6 Months",
+    weightLost: "17 kg",
+    image: "/transformations/14.jpeg",
+    quote: "My transformation photo went viral in my family WhatsApp group!",
+    weightJourney: [86, 83, 79, 76, 73, 70, 69],
+    stamina: 94,
+    consistency: 96,
+    energyLevel: 95,
   },
 ];
 
@@ -247,14 +418,61 @@ function TransformationCard({
 }
 
 export default function ResultsPage() {
+  const [selectedMonth, setSelectedMonth] = useState<number | "all">("all");
+
+  const monthOptions = useMemo(() => {
+    const uniqueMonths = Array.from(
+      new Set(
+        transformations.map((item) => Number(item.duration.match(/\d+/)?.[0] || 0))
+      )
+    ).filter((month) => month > 0);
+
+    return uniqueMonths.sort((a, b) => a - b);
+  }, []);
+
+  const filteredTransformations = useMemo(() => {
+    if (selectedMonth === "all") return transformations;
+
+    return transformations.filter(
+      (item) => Number(item.duration.match(/\d+/)?.[0] || 0) === selectedMonth
+    );
+  }, [selectedMonth]);
+
   return (
     <main>
       <div className="pt-20 lg:pt-24" />
       {/* Transformation Grid */}
-      <section className="pt-4 pb-16 md:pb-20 bg-white">
+      <section className="pt-4 pb-16 md:pb-20 bg-[#ffdee4]">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="mb-6 sm:mb-8 flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <button
+              onClick={() => setSelectedMonth("all")}
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold border transition-all duration-200 ${
+                selectedMonth === "all"
+                  ? "bg-primary text-white border-primary"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-primary/40"
+              }`}
+            >
+              All
+            </button>
+
+            {monthOptions.map((month) => (
+              <button
+                key={month}
+                onClick={() => setSelectedMonth(month)}
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold border transition-all duration-200 ${
+                  selectedMonth === month
+                    ? "bg-primary text-white border-primary"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-primary/40"
+                }`}
+              >
+                {month} Month{month > 1 ? "s" : ""}
+              </button>
+            ))}
+          </div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {transformations.map((t, i) => (
+            {filteredTransformations.map((t, i) => (
               <TransformationCard key={i} t={t} index={i} />
             ))}
           </div>
@@ -262,7 +480,7 @@ export default function ResultsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-slate-50">
+      <section className="py-16 md:py-20 bg-[#ffdee4]">
         <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4 tracking-tight">
             Your transformation is next
@@ -294,7 +512,7 @@ export default function ResultsPage() {
             <a
               href="https://wa.me/917451874271"
               target="_blank"
-              className="inline-flex items-center justify-center gap-2 border border-slate-200 hover:border-slate-300 text-slate-700 px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 hover:bg-slate-50"
+              className="inline-flex items-center justify-center gap-2 border border-slate-200 hover:border-pink-300 text-slate-700 px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 hover:bg-[#ffdee4]/50"
             >
               WhatsApp Us
             </a>

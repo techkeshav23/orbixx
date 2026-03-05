@@ -23,7 +23,7 @@ export default function Stats() {
   return (
     <section
       ref={ref}
-      className="py-24 md:py-32 bg-white relative overflow-hidden"
+      className="pt-8 pb-8 md:pt-10 md:pb-10 bg-white relative overflow-hidden"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#FF6B4A]/[0.04] rounded-full blur-[120px]" />
 

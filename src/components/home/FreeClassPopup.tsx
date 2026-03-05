@@ -12,8 +12,11 @@ export default function FreeClassPopup({
 }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [age, setAge] = useState("");
+  const [goal, setGoal] = useState("");
+  const [bellyFat, setBellyFat] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const spotsLeft = 50;
 
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
@@ -23,19 +26,48 @@ export default function FreeClassPopup({
     };
   }, [open]);
 
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!name.trim()) newErrors.name = "Name is required";
+    if (!phone.trim()) newErrors.phone = "WhatsApp number is required";
+    else if (!/^[0-9]{10}$/.test(phone.trim())) newErrors.phone = "Enter a valid 10-digit number";
+    if (!age.trim()) newErrors.age = "Age is required";
+    else if (Number(age) < 10 || Number(age) > 80) newErrors.age = "Enter a valid age (10-80)";
+    if (!bellyFat) newErrors.bellyFat = "Please select an option";
+    if (!goal.trim()) newErrors.goal = "Please tell us your goal";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = () => {
-    const trimmedName = name.trim().slice(0, 50);
-    const trimmedPhone = phone.trim();
-    if (!trimmedName || !/^[0-9]{10}$/.test(trimmedPhone)) return;
-    const safeName = trimmedName.replace(/[^\w\s]/gi, "");
+    if (!validate()) return;
+    const safeName = name.trim().slice(0, 50).replace(/[^\w\s]/gi, "");
+    const safeGoal = goal.trim().slice(0, 200).replace(/[^\w\s.,!?-]/gi, "");
     const msg = encodeURIComponent(
-      `Hi! I'm ${safeName}. I'd like to book my FREE Zumba class! My number: ${trimmedPhone}`
+      `Hi! I'm ${safeName}.\nAge: ${age.trim()}\nBelly Fat: ${bellyFat}\nGoal: ${safeGoal}\nPhone: ${phone.trim()}\n\nI'd like to start my fitness journey with Orbixx!`
     );
-    window.open(`${WHATSAPP_URL}?text=${msg}`, "_blank", "noopener,noreferrer");
+    const url = `${WHATSAPP_URL}?text=${msg}`;
+    
+    // Use anchor click to avoid popup blockers
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
     setSubmitted(true);
   };
 
   if (!open) return null;
+
+  const inputClass = (field: string) =>
+    `w-full px-5 py-3.5 rounded-xl border text-slate-900 text-sm focus:outline-none transition-all placeholder:text-slate-400 ${
+      errors[field]
+        ? "border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+        : "border-slate-200 bg-slate-50 focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10"
+    }`;
 
   return (
     <div
@@ -45,14 +77,14 @@ export default function FreeClassPopup({
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.3s_ease]" />
 
       <div
-        className="relative z-10 bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)]"
+        className="relative z-10 bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]" />
 
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors cursor-pointer z-10"
           aria-label="Close"
         >
           <svg
@@ -74,52 +106,89 @@ export default function FreeClassPopup({
           {!submitted ? (
             <>
               <div className="text-center mb-6">
-                <div className="text-4xl mb-3">🎉</div>
                 <h3 className="text-2xl font-black text-slate-900 mb-2">
-                  Get Your FREE Zumba Class!
+                  Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span>
                 </h3>
-                <p className="text-slate-500 text-sm">
-                  Enter your details and we&apos;ll book you in instantly via
-                  WhatsApp
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  Fill out the form and press submit to send your details via WhatsApp. Just tap &quot;Send&quot; in WhatsApp to connect with us!
                 </p>
               </div>
 
-              <div className="flex items-center justify-center gap-2 bg-[#FFF1ED] rounded-full px-4 py-2 mb-6">
-                <span className="live-dot w-2 h-2 rounded-full bg-[#FF6B4A]" />
-                <span className="text-[#FF6B4A] text-xs font-bold">
-                  Only {spotsLeft} spots left this week!
-                </span>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-5 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 transition-all placeholder:text-slate-400"
-                  aria-label="Your Name"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-5 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 transition-all placeholder:text-slate-400"
-                  aria-label="Phone Number"
-                />
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Name</label>
+                  <input
+                    type="text"
+                    placeholder="Your full name"
+                    value={name}
+                    onChange={(e) => { setName(e.target.value); setErrors((p) => ({ ...p, name: "" })); }}
+                    className={inputClass("name")}
+                    aria-label="Name"
+                  />
+                  {errors.name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>}
+                </div>
+                <div>
+                  <label className="block text-slate-700 text-sm font-bold mb-1.5">WhatsApp Number</label>
+                  <input
+                    type="tel"
+                    placeholder="10 digit number"
+                    value={phone}
+                    onChange={(e) => { setPhone(e.target.value.replace(/\D/g, "").slice(0, 10)); setErrors((p) => ({ ...p, phone: "" })); }}
+                    className={inputClass("phone")}
+                    aria-label="WhatsApp Number"
+                    maxLength={10}
+                  />
+                  {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
+                </div>
+                <div>
+                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Age</label>
+                  <input
+                    type="number"
+                    placeholder="Your age"
+                    value={age}
+                    onChange={(e) => { setAge(e.target.value); setErrors((p) => ({ ...p, age: "" })); }}
+                    className={inputClass("age")}
+                    aria-label="Age"
+                    min={10}
+                    max={80}
+                  />
+                  {errors.age && <p className="text-red-500 text-xs mt-1 font-medium">{errors.age}</p>}
+                </div>
+                <div>
+                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Do you have belly fat?</label>
+                  <select
+                    value={bellyFat}
+                    onChange={(e) => { setBellyFat(e.target.value); setErrors((p) => ({ ...p, bellyFat: "" })); }}
+                    className={inputClass("bellyFat")}
+                    aria-label="Belly Fat"
+                  >
+                    <option value="">Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="A little">A little</option>
+                  </select>
+                  {errors.bellyFat && <p className="text-red-500 text-xs mt-1 font-medium">{errors.bellyFat}</p>}
+                </div>
+                <div>
+                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Goal</label>
+                  <textarea
+                    placeholder="e.g. Weight loss, PCOD, Toning, Energy..."
+                    value={goal}
+                    onChange={(e) => { setGoal(e.target.value); setErrors((p) => ({ ...p, goal: "" })); }}
+                    rows={2}
+                    className={`${inputClass("goal")} resize-none`}
+                    aria-label="Goal"
+                  />
+                  {errors.goal && <p className="text-red-500 text-xs mt-1 font-medium">{errors.goal}</p>}
+                </div>
               </div>
 
               <button
                 onClick={handleSubmit}
-                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4 rounded-xl font-bold text-sm hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4 rounded-xl font-bold text-sm hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
-                🎯 BOOK MY FREE CLASS
+                Submit to WhatsApp
               </button>
-
-              <p className="text-slate-300 text-[10px] text-center mt-4">
-                No spam. No card required. Redirects to WhatsApp.
-              </p>
             </>
           ) : (
             <div className="text-center py-6">

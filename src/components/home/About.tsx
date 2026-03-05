@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useInView } from "@/lib/hooks";
+import { Check, X } from "lucide-react";
 
 export default function About() {
   const { ref, inView } = useInView();
@@ -10,7 +11,7 @@ export default function About() {
     <section
       ref={ref}
       id="about"
-      className="py-24 md:py-32 bg-slate-50 overflow-hidden"
+      className="pt-8 pb-10 md:pt-10 md:pb-12 bg-[#ffdee4] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -76,10 +77,10 @@ export default function About() {
                     <div className="absolute inset-4 rounded-full border border-dashed border-slate-200 ring-spin" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-5xl sm:text-6xl font-black font-mono text-slate-900 leading-none">
-                        45
+                        1<span className="text-3xl sm:text-4xl">hr</span>
                       </span>
                       <span className="text-slate-400 text-[10px] tracking-[0.25em] uppercase mt-1.5 font-mono">
-                        min / session
+                        per session
                       </span>
                     </div>
                   </div>
@@ -94,9 +95,9 @@ export default function About() {
                     style={{ transitionDelay: "800ms" }}
                   >
                     {[
-                      { val: "500+", unit: "cal burn", color: "#FF6B4A" },
-                      { val: "140", unit: "avg BPM", color: "#EC4899" },
-                      { val: "92%", unit: "fun rate", color: "#14B8A6" },
+                      { val: "50min", unit: "workout", color: "#FF6B4A" },
+                      { val: "10min", unit: "doubt session", color: "#EC4899" },
+                      { val: "500+", unit: "cal burn", color: "#14B8A6" },
                     ].map((s, i) => (
                       <div key={i} className="text-center">
                         <div
@@ -176,7 +177,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right — Content */}
+          {/* Right — Comparison Table */}
           <div
             className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-200 ${
               inView
@@ -187,53 +188,64 @@ export default function About() {
             <span className="text-[#FF6B4A] text-xs font-mono tracking-[0.3em] uppercase block mb-4">
               // WHY ORBIXX
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-[1.1] tracking-tight mb-6">
-              Fitness that doesn&apos;t feel
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-[1.1] tracking-tight mb-8">
+              Orbixx Fitness
               <br />
-              like punishment
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">vs. Others</span>
             </h2>
-            <p className="text-slate-500 text-base leading-relaxed mb-10">
-              We blend high-energy Zumba choreography with effective workout
-              science. Every session is designed to burn 500+ calories while
-              you&apos;re too busy having fun to notice. That&apos;s the Orbixx
-              difference.
-            </p>
 
-            {/* Progress bars */}
-            <div className="space-y-6">
+            {/* Comparison Table */}
+            <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+              {/* Table Header */}
+              <div className="grid grid-cols-4 bg-[#ffdee4]/50 border-b border-pink-200">
+                <div className="px-4 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Features</div>
+                <div className="px-3 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Offline</div>
+                <div className="px-3 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Other Online</div>
+                <div className="px-3 py-3.5 text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] uppercase tracking-wider text-center">Orbixx</div>
+              </div>
+
+              {/* Table Rows */}
               {[
-                {
-                  label: "Members see results in 30 days",
-                  value: 85,
-                  color: "from-[#FF6B4A] to-[#EC4899]",
-                },
-                {
-                  label: "Continue after month one",
-                  value: 93,
-                  color: "from-[#EC4899] to-[#14B8A6]",
-                },
-                {
-                  label: "Would recommend to friends",
-                  value: 98,
-                  color: "from-[#14B8A6] to-[#FF6B4A]",
-                },
-              ].map((bar, i) => (
-                <div key={i}>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-500">{bar.label}</span>
-                    <span className="text-slate-900 font-mono font-bold">
-                      {bar.value}%
-                    </span>
+                { feature: "Certified Celebrity Instructors", offline: false, otherOnline: false, orbixx: true },
+                { feature: "1-on-1 Attention", offline: true, otherOnline: false, orbixx: true },
+                { feature: "Unlimited LIVE Access", offline: false, otherOnline: false, orbixx: true },
+                { feature: "Guaranteed Results", offline: false, otherOnline: false, orbixx: true },
+                { feature: "Customer Success Agent", offline: true, otherOnline: false, orbixx: true },
+              ].map((row, i) => (
+                <div
+                  key={i}
+                  className={`grid grid-cols-4 items-center border-b border-slate-100 last:border-b-0 transition-all duration-500 ${
+                    inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                  }`}
+                  style={{ transitionDelay: `${600 + i * 100}ms` }}
+                >
+                  <div className="px-4 py-4 text-sm font-bold text-slate-800">{row.feature}</div>
+                  <div className="flex justify-center py-4">
+                    {row.offline ? (
+                      <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <Check className="w-4 h-4 text-emerald-600" strokeWidth={3} />
+                      </div>
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center">
+                        <X className="w-4 h-4 text-red-500" strokeWidth={3} />
+                      </div>
+                    )}
                   </div>
-                  <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-gradient-to-r ${bar.color} rounded-full transition-all duration-1500 ease-[cubic-bezier(0.16,1,0.3,1)]`}
-                      style={{
-                        width: inView ? `${bar.value}%` : "0%",
-                        transitionDelay: `${800 + i * 200}ms`,
-                        transitionDuration: "1.5s",
-                      }}
-                    />
+                  <div className="flex justify-center py-4">
+                    {row.otherOnline ? (
+                      <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <Check className="w-4 h-4 text-emerald-600" strokeWidth={3} />
+                      </div>
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center">
+                        <X className="w-4 h-4 text-red-500" strokeWidth={3} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-center py-4">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF6B4A]/20 to-[#EC4899]/20 flex items-center justify-center">
+                      <Check className="w-4 h-4 text-[#FF6B4A]" strokeWidth={3} />
+                    </div>
                   </div>
                 </div>
               ))}

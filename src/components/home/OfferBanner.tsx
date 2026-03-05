@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { WHATSAPP_URL } from "@/lib/constants";
 
 export default function OfferBanner({ onClose }: { onClose: () => void }) {
   const [timeLeft, setTimeLeft] = useState({ h: 2, m: 0, s: 0 });
@@ -51,12 +51,14 @@ export default function OfferBanner({ onClose }: { onClose: () => void }) {
           </span>
         </div>
 
-        <Link
-          href="/pricing"
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="bg-white text-[#FF6B4A] px-5 py-1.5 rounded-full text-xs font-bold hover:bg-white/90 transition-all hover:scale-105 whitespace-nowrap"
         >
           CLAIM NOW →
-        </Link>
+        </a>
 
         <button
           onClick={onClose}

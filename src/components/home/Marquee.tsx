@@ -30,20 +30,20 @@ export default function Marquee() {
           <span
             className={`text-2xl sm:text-4xl font-black tracking-tight ${
               i % 2 === 0
-                ? "text-transparent [-webkit-text-stroke:1.5px_rgba(255,107,74,0.6)]"
-                : "text-slate-300"
+                ? "text-transparent [-webkit-text-stroke:2px_#FF6B4A]"
+                : "text-[#FF6B4A]"
             }`}
           >
             {w}
           </span>
-          <span className="text-[#FF6B4A]/40 text-lg">◈</span>
+          <span className="text-[#EC4899] text-lg">◈</span>
         </span>
       ))}
     </div>
   );
 
   return (
-    <div className="bg-slate-50 border-y border-slate-100 py-6 overflow-hidden">
+    <div className="bg-[#f8c8d0] border-y border-pink-300 py-6 overflow-hidden">
       <div className="marquee-track flex whitespace-nowrap">
         {renderSet(0)}
         {renderSet(1)}

@@ -23,7 +23,7 @@ export default function ContactPage() {
           <div className="grid sm:grid-cols-3 gap-6 mb-16">
             <a
               href="tel:+917451874271"
-              className="bg-slate-50 rounded-xl p-6 text-center border border-slate-100 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
+              className="bg-[#ffdee4]/40 rounded-xl p-6 text-center border border-pink-200 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -36,7 +36,7 @@ export default function ContactPage() {
 
             <a
               href="mailto:info@orbixxfitness.com"
-              className="bg-slate-50 rounded-xl p-6 text-center border border-slate-100 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
+              className="bg-[#ffdee4]/40 rounded-xl p-6 text-center border border-pink-200 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -50,7 +50,7 @@ export default function ContactPage() {
             <a
               href="https://wa.me/917451874271"
               target="_blank"
-              className="bg-slate-50 rounded-xl p-6 text-center border border-slate-100 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
+              className="bg-[#ffdee4]/40 rounded-xl p-6 text-center border border-pink-200 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
             >
               <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">

@@ -25,7 +25,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
               <Image
-                src="/logo.jpg"
+                src="/logo.png"
                 alt="Orbixx Fitness Logo"
                 width={36}
                 height={36}

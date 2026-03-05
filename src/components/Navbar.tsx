@@ -18,8 +18,9 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/#about", label: "About" },
     { href: "/results", label: "Results" },
-    { href: "/pricing", label: "Pricing" },
     { href: "/trainers", label: "Trainers" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/schedule", label: "Schedule" },
   ];
 
   return (
@@ -33,20 +34,20 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/logo.jpg"
+              src="/logo.png"
               alt="Orbixx Fitness Logo"
-              width={40}
-              height={40}
-              className="w-9 h-9 lg:w-10 lg:h-10 rounded-full object-cover ring-2 ring-primary/20"
+              width={48}
+              height={48}
+              className="w-11 h-11 lg:w-12 lg:h-12 rounded-full object-cover ring-2 ring-primary/20 shadow-sm"
               priority
             />
             <div className="flex flex-col">
-              <span className="text-lg lg:text-xl font-bold tracking-tight text-slate-900">
+              <span className="text-xl lg:text-2xl font-black tracking-tight text-slate-900">
                 ORBIXX
               </span>
-              <span className="text-[10px] font-medium uppercase tracking-widest -mt-0.5 text-primary">
+              <span className="text-[11px] font-bold uppercase tracking-widest -mt-0.5 text-primary">
                 Fitness
               </span>
             </div>
@@ -67,7 +68,7 @@ export default function Navbar() {
               href="/pricing"
               className="ml-4 bg-primary text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
             >
-              Get Started
+              BOOK NOW
             </Link>
           </div>
 
@@ -77,7 +78,7 @@ export default function Navbar() {
               href="/pricing"
               className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-semibold"
             >
-              Join
+              BOOK NOW
             </Link>
             <button
               className="p-2 rounded-lg transition-colors"
