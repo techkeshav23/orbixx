@@ -134,10 +134,10 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
     img.src = "/logo.png";
 
     img.onload = () => {
-      // Aggressively reduce particles on mobile for smooth 60fps
+      // Balanced particles: enough to see logo clearly, still smooth on mobile
       const isMobile = W < 768;
       const NUM = isMobile
-        ? Math.min(300, Math.max(150, Math.round(W * H / 3000)))
+        ? Math.min(600, Math.max(400, Math.round(W * H / 1500)))
         : Math.min(2000, Math.max(800, Math.round(W * H / 800)));
       const logoPoints = sampleLogoPoints(img, W, H, NUM);
 
@@ -153,7 +153,7 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
           ty,
           vx: (Math.random() - 0.5) * 4,
           vy: (Math.random() - 0.5) * 4,
-          size: isMobile ? 2 + Math.random() * 2 : 1 + Math.random() * 1.8,
+          size: isMobile ? 1.2 + Math.random() * 1.2 : 1 + Math.random() * 1.8,
           r,
           g,
           b,
@@ -171,13 +171,13 @@ export default function ParticleSilhouetteLoader({ onComplete }: { onComplete?: 
       // ── TIME-BASED TIMELINE (milliseconds) — same speed on every device ──
       // 0–500ms:      swirl (particles orbit center)
       // 500–1000ms:   gather (particles fly to logo positions) — 0.5s
-      // 1000–1500ms:  hold (logo visible, shimmer) — 0.5s
-      // 1500ms:       explode (cinematic) — 1s
-      // 2500ms:       done
+      // 1000–2000ms:  hold (logo visible, shimmer) — 1s
+      // 2000ms:       explode (cinematic) — 1s
+      // 3000ms:       done
       const SWIRL_END = 500;
       const GATHER_END = 1000;
-      const HOLD_END = 1500;
-      const TOTAL = 2500;
+      const HOLD_END = 2000;
+      const TOTAL = 3000;
 
       const animate = () => {
         const t = performance.now() - startTime; // elapsed ms
