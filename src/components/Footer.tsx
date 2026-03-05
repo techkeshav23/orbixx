@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, FACEBOOK_URL, YOUTUBE_URL } from "@/lib/constants";
+import { PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, FACEBOOK_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/lib/constants";
 
 const socialLinks = [
   { name: "instagram", url: INSTAGRAM_URL },
@@ -124,12 +124,14 @@ export default function Footer() {
             <p className="text-slate-400 text-sm mb-4">
               Ready to begin your fitness journey? Join our community today.
             </p>
-            <Link
-              href="/pricing"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-primary hover:bg-primary-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200"
             >
-              View Plans
-            </Link>
+              JOIN Now
+            </a>
           </div>
         </div>
       </div>
