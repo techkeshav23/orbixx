@@ -123,12 +123,12 @@ export default function Footer() {
             <p className="text-slate-400 text-sm mb-4">
               Ready to begin your fitness journey? Join our community today.
             </p>
-            <a
-              href="#pricing"
+            <Link
+              href="/pricing"
               className="inline-block bg-primary hover:bg-primary-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200"
             >
               View Plans
-            </a>
+            </Link>
           </div>
         </div>
       </div>

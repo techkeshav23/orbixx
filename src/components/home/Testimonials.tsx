@@ -1,7 +1,7 @@
 "use client";
 
 import { useInView } from "@/lib/hooks";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 const stories = [
   {
@@ -87,6 +87,7 @@ export default function Testimonials() {
   const { ref, inView } = useInView(0.1);
   const scrollRef = useRef<HTMLDivElement>(null);
   const teleporting = useRef(false);
+  const [paused, setPaused] = useState(false);
 
   // When scroll reaches the second copy, jump back to position 0 (same visual position)
   const handleScroll = useCallback(() => {
@@ -106,6 +107,17 @@ export default function Testimonials() {
     el.addEventListener("scroll", handleScroll, { passive: true });
     return () => el.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
+
+  // Auto-slide every 3 seconds — pauses on hover/touch
+  useEffect(() => {
+    if (paused || !inView) return;
+    const interval = setInterval(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      el.scrollBy({ left: CARD_W + GAP, behavior: "smooth" });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [paused, inView]);
 
   const scroll = (dir: "left" | "right") => {
     const el = scrollRef.current;
@@ -161,6 +173,10 @@ export default function Testimonials() {
         {/* Infinite Sliding Cards */}
         <div
           ref={scrollRef}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
           className="flex gap-6 overflow-x-auto pb-4 -mx-5 px-5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
