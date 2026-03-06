@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   description:
     "Join our vibrant online Zumba classes designed exclusively for women. Get fit, have fun, and be part of an amazing community—all from home.",
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
     title: "Orbixx Fitness - Online Zumba Classes for Women",
