@@ -4,13 +4,13 @@ import React from "react";
 import { useInView } from "@/lib/hooks";
 import { Check, X } from "lucide-react";
 
-export default function About() {
+export default function WhyOrbixx() {
   const { ref, inView } = useInView();
 
   return (
     <section
       ref={ref}
-      id="about"
+      id="why-orbixx"
       className="pt-8 pb-10 md:pt-10 md:pb-12 bg-[#ffdee4] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">

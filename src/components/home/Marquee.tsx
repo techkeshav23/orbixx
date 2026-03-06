@@ -30,8 +30,8 @@ export default function Marquee() {
           <span
             className={`text-2xl sm:text-4xl font-black tracking-tight ${
               i % 2 === 0
-                ? "text-transparent [-webkit-text-stroke:2px_#FF6B4A]"
-                : "text-[#FF6B4A]"
+                ? "text-transparent [-webkit-text-stroke:2px_white]"
+                : "text-white"
             }`}
           >
             {w}

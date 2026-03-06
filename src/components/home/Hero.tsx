@@ -181,18 +181,16 @@ export default function Hero({
               <div className="relative group/see">
                 <button
                   onClick={onSeeResults}
-                  className="relative inline-flex items-center gap-3 text-[#FF6B4A] hover:text-white px-8 py-5 rounded-full font-bold text-sm transition-all duration-300 border-2 border-[#FF6B4A] hover:bg-gradient-to-r hover:from-[#FF6B4A] hover:to-[#EC4899] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.2)] overflow-visible"
+                  className="relative inline-flex items-center gap-3 text-white px-8 py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible"
                 >
                   {/* Ripple ping rings */}
                   <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
                   <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/20 see-ping" style={{ animationDelay: "0.8s" }} />
 
-                  <span className="text-lg animate-bounce" role="img" aria-label="point right">&#x1F449;</span>
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                   SEE RESULTS
-                  <span className="text-lg animate-bounce" role="img" aria-label="point left">&#x1F448;</span>
                 </button>
               </div>
 

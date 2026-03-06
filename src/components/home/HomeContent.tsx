@@ -6,7 +6,7 @@ import { useLoaderReady } from "@/components/AppShell";
 import Hero from "./Hero";
 import Marquee from "./Marquee";
 import Features from "./Features";
-import About from "./About";
+import WhyOrbixx from "./WhyOrbixx";
 import Stats from "./Stats";
 import Testimonials from "./Testimonials";
 import Trainers from "./Trainers";
@@ -39,7 +39,7 @@ export default function HomeContent() {
       />
       <Marquee />
       <Features />
-      <About />
+      <WhyOrbixx />
       <Stats />
       <Testimonials />
       <Trainers />

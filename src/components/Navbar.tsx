@@ -9,14 +9,22 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    const close = () => setIsOpen(false);
+    window.addEventListener("scroll", close);
+    return () => window.removeEventListener("scroll", close);
+  }, [isOpen]);
+
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/#about", label: "About" },
+    { href: "/#why-orbixx", label: "Why Orbixx" },
     { href: "/results", label: "Results" },
     { href: "/trainers", label: "Trainers" },
     { href: "/pricing", label: "Pricing" },
@@ -25,14 +33,16 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 h-16 lg:h-20 backdrop-blur-xl transition-[background-color,box-shadow] duration-300 border-b ${
         scrolled
-          ? "bg-white/95 backdrop-blur-lg shadow-sm border-b border-slate-100"
-          : "bg-white border-b border-transparent"
+          ? "bg-white/70 shadow-lg border-white/30"
+          : isOpen
+            ? "bg-white/70 border-transparent"
+            : "bg-white/20 border-white/20"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <Image
@@ -101,9 +111,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — absolutely positioned below the nav */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
+        className={`lg:hidden absolute top-full left-0 right-0 overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >

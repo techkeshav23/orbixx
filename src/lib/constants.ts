@@ -2,9 +2,6 @@ export const WHATSAPP_NUMBER =
   process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
-export const PHONE_TEL = `tel:+${WHATSAPP_NUMBER}`;
-export const PHONE_DISPLAY =
-  process.env.NEXT_PUBLIC_PHONE_DISPLAY || "";
 
 // Social Media Links
 export const INSTAGRAM_URL =
