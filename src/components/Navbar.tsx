@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { WHATSAPP_URL } from "@/lib/constants";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,22 +75,26 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/pricing"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="ml-4 bg-primary text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
             >
               BOOK NOW
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-3 lg:hidden">
-            <Link
-              href="/pricing"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-semibold"
             >
               BOOK NOW
-            </Link>
+            </a>
             <button
               className="p-2 rounded-lg transition-colors"
               onClick={() => setIsOpen(!isOpen)}
@@ -131,13 +136,15 @@ export default function Navbar() {
             ))}
           </div>
           <div className="border-t border-slate-100 mt-3 pt-3">
-            <Link
-              href="/pricing"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="block w-full text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold text-sm"
               onClick={() => setIsOpen(false)}
             >
               Start Your Journey
-            </Link>
+            </a>
           </div>
         </div>
       </div>
