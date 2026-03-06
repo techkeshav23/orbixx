@@ -24,11 +24,11 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "Contact Us" },
     { href: "/results", label: "Results" },
     { href: "/trainers", label: "Trainers" },
     { href: "/pricing", label: "Pricing" },
     { href: "/schedule", label: "Schedule" },
+    { href: "/about", label: "About" },
   ];
 
   return (
