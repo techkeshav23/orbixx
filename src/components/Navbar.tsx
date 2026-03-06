@@ -24,7 +24,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/#why-orbixx", label: "Why Orbixx" },
+    { href: "/about", label: "Contact Us" },
     { href: "/results", label: "Results" },
     { href: "/trainers", label: "Trainers" },
     { href: "/pricing", label: "Pricing" },

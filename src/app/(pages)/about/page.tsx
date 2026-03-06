@@ -2,7 +2,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import { WHATSAPP_URL } from "@/lib/constants";
 
-export default function ContactPage() {
+export default function AboutPage() {
   return (
     <main>
       <div className="pt-16 lg:pt-20" />
