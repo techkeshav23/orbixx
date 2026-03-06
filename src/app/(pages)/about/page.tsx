@@ -82,6 +82,21 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
+
+              {/* Live Map */}
+              <div className="mt-5 rounded-2xl overflow-hidden border border-pink-300 shadow-sm">
+                <iframe
+                  title="Orbixx Fitness Location"
+                  src="https://maps.google.com/maps?q=45+Jairambagh+Colony+Dayalbagh+Agra+282005&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="220"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
 
@@ -136,7 +151,12 @@ export default function AboutPage() {
               </a>
 
               {/* Location */}
-              <div className="group relative rounded-2xl p-8 border border-pink-300 bg-white hover:border-accent/30 transition-all duration-500 overflow-hidden">
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=45+Jairambagh+Colony+Near+100+Feet+Road+Dayalbagh+Agra+282005"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-2xl p-8 border border-pink-300 bg-white hover:border-accent/30 transition-all duration-500 overflow-hidden"
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative z-10">
                   <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-[-4deg] transition-transform duration-500">
@@ -147,10 +167,10 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-lg mb-1">Visit Us</h3>
                   <p className="text-slate-500 text-sm mb-3">Our headquarters</p>
-                  <span className="text-accent text-sm font-bold">Agra, India</span>
+                  <span className="text-accent text-sm font-bold group-hover:underline">Get Directions &rarr;</span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent to-transparent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
-              </div>
+              </a>
             </div>
           </div>
 
