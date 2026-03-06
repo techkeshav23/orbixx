@@ -220,21 +220,6 @@ export default function PricingPage() {
               );
             })}
           </div>
-
-          {/* Trust note */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
-            {[
-              { icon: <Lock className="w-4 h-4 text-slate-400" />, text: "Secure Payment" },
-              { icon: <MessageCircle className="w-4 h-4 text-slate-400" />, text: "24/7 Support" },
-              { icon: <ShieldCheck className="w-4 h-4 text-slate-400" />, text: "Money-back Guarantee" },
-              { icon: <Star className="w-4 h-4 text-amber-400 fill-amber-400" />, text: "4.9★ Rated" },
-            ].map((item) => (
-              <div key={item.text} className="flex items-center gap-2">
-                {item.icon}
-                <span className="text-slate-500 text-xs font-semibold">{item.text}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
