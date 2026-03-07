@@ -80,7 +80,7 @@ export default function Hero({
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-start overflow-hidden bg-white mb-4"
+      className="relative flex flex-col lg:min-h-screen overflow-hidden bg-white mb-4"
     >
       {/* Soft gradient accents */}
       <div className="absolute inset-0 overflow-hidden">
@@ -89,7 +89,7 @@ export default function Hero({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] sm:w-[400px] h-[40vw] sm:h-[400px] bg-[#EC4899]/[0.05] rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-40 sm:pb-28 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-8 lg:pb-10 w-full flex-1">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
           <div>
             {/* Main headline — Cinematic Pullback */}
@@ -345,7 +345,7 @@ export default function Hero({
       )}
 
         {/* Bottom stats with stagger — full width */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#ffdee4]">
+        <div className="mt-auto bg-[#ffdee4]">
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-10 py-5 sm:py-8 text-center">
           {[
