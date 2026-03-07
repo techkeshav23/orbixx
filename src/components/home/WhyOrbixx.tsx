@@ -25,12 +25,12 @@ export default function WhyOrbixx() {
           >
             <div className="relative">
               {/* Main visual — session dashboard */}
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden relative bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200 shadow-sm">
+              <div className="sm:aspect-[4/5] rounded-3xl overflow-hidden relative bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200 shadow-sm">
                 <div className="absolute top-10 right-10 w-[50vw] sm:w-[200px] h-[50vw] sm:h-[200px] bg-[#FF6B4A]/[0.07] rounded-full blur-[80px]" />
                 <div className="absolute bottom-10 left-10 w-[45vw] sm:w-[180px] h-[45vw] sm:h-[180px] bg-[#14B8A6]/[0.06] rounded-full blur-[80px]" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] sm:w-[160px] h-[40vw] sm:h-[160px] bg-[#EC4899]/[0.05] rounded-full blur-[60px]" />
 
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                <div className="relative sm:absolute sm:inset-0 flex flex-col items-center justify-center py-8 px-5 sm:p-8">
                   {/* Animated circular progress ring */}
                   <div className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56">
                     <svg
