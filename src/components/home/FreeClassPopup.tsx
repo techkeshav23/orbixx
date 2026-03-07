@@ -63,7 +63,7 @@ export default function FreeClassPopup({
   if (!open) return null;
 
   const inputClass = (field: string) =>
-    `w-full px-5 py-3.5 rounded-xl border text-slate-900 text-sm focus:outline-none transition-all placeholder:text-slate-400 ${
+    `w-full px-5 py-4 rounded-xl border text-slate-900 text-base focus:outline-none transition-all placeholder:text-slate-400 ${
       errors[field]
         ? "border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200"
         : "border-slate-200 bg-slate-50 focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10"
@@ -77,7 +77,7 @@ export default function FreeClassPopup({
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.3s_ease]" />
 
       <div
-        className="relative z-10 bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[90vh] overflow-y-auto"
+        className="relative z-10 bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]" />
@@ -102,21 +102,21 @@ export default function FreeClassPopup({
           </svg>
         </button>
 
-        <div className="p-8 pt-6">
+        <div className="p-8 sm:p-10 pt-6 sm:pt-8">
           {!submitted ? (
             <>
               <div className="text-center mb-6 pr-8">
-                <h3 className="text-2xl font-black text-slate-900 mb-2">
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">
                   Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span>
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
                   Fill out the form and press submit to send your details via WhatsApp. Just tap &quot;Send&quot; in WhatsApp to connect with us!
                 </p>
               </div>
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Name</label>
+                  <label className="block text-slate-700 text-base font-bold mb-1.5">Name</label>
                   <input
                     type="text"
                     placeholder="Your full name"
@@ -128,7 +128,7 @@ export default function FreeClassPopup({
                   {errors.name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-sm font-bold mb-1.5">WhatsApp Number</label>
+                  <label className="block text-slate-700 text-base font-bold mb-1.5">WhatsApp Number</label>
                   <input
                     type="tel"
                     placeholder="10 digit number"
@@ -141,7 +141,7 @@ export default function FreeClassPopup({
                   {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Age</label>
+                  <label className="block text-slate-700 text-base font-bold mb-1.5">Age</label>
                   <input
                     type="number"
                     placeholder="Your age"
@@ -155,7 +155,7 @@ export default function FreeClassPopup({
                   {errors.age && <p className="text-red-500 text-xs mt-1 font-medium">{errors.age}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Do you have belly fat?</label>
+                  <label className="block text-slate-700 text-base font-bold mb-1.5">Do you have belly fat?</label>
                   <select
                     value={bellyFat}
                     onChange={(e) => { setBellyFat(e.target.value); setErrors((p) => ({ ...p, bellyFat: "" })); }}
@@ -170,7 +170,7 @@ export default function FreeClassPopup({
                   {errors.bellyFat && <p className="text-red-500 text-xs mt-1 font-medium">{errors.bellyFat}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-sm font-bold mb-1.5">Goal</label>
+                  <label className="block text-slate-700 text-base font-bold mb-1.5">Goal</label>
                   <textarea
                     placeholder="e.g. Weight loss, PCOD, Toning, Energy..."
                     value={goal}
@@ -185,7 +185,7 @@ export default function FreeClassPopup({
 
               <button
                 onClick={handleSubmit}
-                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4 rounded-xl font-bold text-sm hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4.5 rounded-xl font-bold text-base hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 Submit to WhatsApp
               </button>
