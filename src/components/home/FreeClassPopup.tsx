@@ -77,7 +77,7 @@ export default function FreeClassPopup({
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.3s_ease]" />
 
       <div
-        className="relative z-10 bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[85vh] sm:max-h-[90vh] overflow-y-auto flex flex-col"
+        className="relative z-10 bg-white rounded-3xl max-w-xl w-full shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[85vh] sm:max-h-[90vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] shrink-0" />
@@ -183,7 +183,7 @@ export default function FreeClassPopup({
                 </div>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 pb-4 sm:pb-2">
                 <button
                   onClick={handleSubmit}
                   className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-3.5 sm:py-4.5 rounded-xl font-bold text-sm sm:text-base hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
