@@ -80,6 +80,7 @@ const stories = [
 
 // Triple the stories for infinite loop illusion
 const doubled = [...stories, ...stories];
+const CARD_W_SM = 280;
 const CARD_W = 340;
 const GAP = 24;
 
@@ -93,7 +94,9 @@ export default function Testimonials() {
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el || teleporting.current) return;
-    const oneSetWidth = stories.length * (CARD_W + GAP);
+    const isMobile = window.innerWidth < 640;
+    const cardW = isMobile ? CARD_W_SM : CARD_W;
+    const oneSetWidth = stories.length * (cardW + GAP);
     if (el.scrollLeft >= oneSetWidth) {
       teleporting.current = true;
       el.scrollLeft -= oneSetWidth;
@@ -114,7 +117,9 @@ export default function Testimonials() {
     const interval = setInterval(() => {
       const el = scrollRef.current;
       if (!el) return;
-      el.scrollBy({ left: CARD_W + GAP, behavior: "smooth" });
+      const isMobile = window.innerWidth < 640;
+      const cardW = isMobile ? CARD_W_SM : CARD_W;
+      el.scrollBy({ left: cardW + GAP, behavior: "smooth" });
     }, 2000);
     return () => clearInterval(interval);
   }, [paused, inView]);
@@ -183,7 +188,7 @@ export default function Testimonials() {
           {doubled.map((story, i) => (
             <div
               key={i}
-              className="group shrink-0 w-[300px] sm:w-[340px]"
+              className="group shrink-0 w-[280px] sm:w-[340px]"
             >
               <div className="bg-white border border-slate-100 rounded-2xl p-7 h-full hover:border-slate-200 hover:shadow-xl transition-all duration-500 relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FF6B4A]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -28,9 +28,9 @@ export default function Marquee() {
           className="flex items-center gap-3 mx-3 sm:mx-4"
         >
           <span
-            className={`text-2xl sm:text-4xl font-black tracking-tight ${
+            className={`text-xl sm:text-4xl font-black tracking-tight ${
               i % 2 === 0
-                ? "text-transparent [-webkit-text-stroke:2px_white]"
+                ? "text-transparent [-webkit-text-stroke:1px_white] sm:[-webkit-text-stroke:2px_white]"
                 : "text-white"
             }`}
           >
@@ -43,7 +43,7 @@ export default function Marquee() {
   );
 
   return (
-    <div className="bg-[#f8c8d0] border-y border-pink-300 py-6 overflow-hidden">
+    <div className="bg-[#f8c8d0] border-y border-pink-300 py-4 sm:py-6 overflow-hidden">
       <div className="marquee-track flex whitespace-nowrap">
         {renderSet(0)}
         {renderSet(1)}

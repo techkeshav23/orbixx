@@ -111,7 +111,7 @@ export default function Hero({
                   </span>
                 ))}
                 <div
-                  className={`h-[3px] w-40 mt-4 rounded-full bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] origin-left ${
+                  className={`h-[3px] w-28 sm:w-40 mt-4 rounded-full bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] origin-left ${
                     heroPhase >= 3 ? "cine-wipe" : "opacity-0 scale-x-0"
                   }`}
                 />
@@ -130,7 +130,7 @@ export default function Hero({
 
             {/* Sub text */}
             <p
-              className={`text-slate-500 text-lg sm:text-xl max-w-xl leading-relaxed mb-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`text-slate-500 text-base sm:text-xl max-w-xl leading-relaxed mb-8 sm:mb-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 heroPhase >= 3
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
@@ -143,7 +143,7 @@ export default function Hero({
 
             {/* CTA group */}
             <div
-              className={`flex flex-col items-center sm:items-start sm:flex-row gap-5 mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`flex flex-col items-stretch sm:items-start sm:flex-row gap-4 sm:gap-5 mb-12 sm:mb-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 heroPhase >= 3
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
@@ -159,7 +159,7 @@ export default function Hero({
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
+                  className="magnetic-btn group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer w-full sm:w-auto"
                   style={{ transform: btnTransform }}
                 >
                   <span>BOOK NOW</span>
@@ -181,7 +181,7 @@ export default function Hero({
               <div className="relative group/see">
                 <button
                   onClick={onSeeResults}
-                  className="relative inline-flex items-center gap-3 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible"
+                  className="relative inline-flex items-center justify-center gap-3 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible w-full sm:w-auto"
                 >
                   {/* Ripple ping rings */}
                   <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
@@ -347,7 +347,7 @@ export default function Hero({
         {/* Bottom stats with stagger — full width */}
         <div className="absolute bottom-0 left-0 right-0 bg-[#ffdee4]">
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 py-8 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-10 py-5 sm:py-8 text-center">
           {[
             { val: "18K+", label: "Active Members" },
             { val: "4.6", label: "App Rating" },
@@ -363,7 +363,7 @@ export default function Hero({
               }`}
               style={{ transitionDelay: `${600 + i * 100}ms` }}
             >
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+              <div className="text-xl sm:text-3xl font-black text-slate-900 font-mono">
                 {stat.val}
               </div>
               <div className="text-slate-400 text-xs mt-1 tracking-wider uppercase">

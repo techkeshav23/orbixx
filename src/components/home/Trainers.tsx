@@ -116,7 +116,7 @@ export default function Trainers() {
           {trainers.map((trainer, i) => (
             <div
               key={trainer.name}
-              className={`group snap-start shrink-0 w-[300px] sm:w-[340px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`group snap-start shrink-0 w-[280px] sm:w-[340px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: `${200 + i * 150}ms` }}

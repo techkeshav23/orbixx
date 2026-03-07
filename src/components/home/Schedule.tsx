@@ -10,11 +10,11 @@ export default function Schedule() {
   const eveningSlots = ["5 PM", "6 PM", "7 PM", "8 PM", "10 PM"];
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-white">
+    <section ref={ref} className="py-14 sm:py-20 md:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         {/* Header */}
         <div
-          className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`text-center max-w-2xl mx-auto mb-10 sm:mb-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             inView
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-8"

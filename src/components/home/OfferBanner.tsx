@@ -28,7 +28,7 @@ export default function OfferBanner({ onClose }: { onClose: () => void }) {
       {/* Animated shimmer */}
       <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_25%,rgba(255,255,255,0.15)_50%,transparent_75%)] animate-[shimmer_2.5s_infinite]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 pr-12 sm:pr-4 py-3 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
         <div className="flex items-center gap-3">
           <span className="text-xl">🔥</span>
           <span className="font-bold text-sm sm:text-base">
@@ -62,11 +62,11 @@ export default function OfferBanner({ onClose }: { onClose: () => void }) {
 
         <button
           onClick={onClose}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1"
+          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-2"
           aria-label="Close banner"
         >
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

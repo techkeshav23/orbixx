@@ -25,7 +25,7 @@ export default function Stats() {
       ref={ref}
       className="pt-8 pb-8 md:pt-10 md:pb-10 bg-white relative overflow-hidden"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#FF6B4A]/[0.04] rounded-full blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] sm:w-[600px] h-[40vw] sm:h-[300px] bg-[#FF6B4A]/[0.04] rounded-full blur-[120px]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">

@@ -14,7 +14,7 @@ export default function WhyOrbixx() {
       className="pt-8 pb-10 md:pt-10 md:pb-12 bg-[#ffdee4] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-24 items-center">
           {/* Left — Visual */}
           <div
             className={`transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -32,7 +32,7 @@ export default function WhyOrbixx() {
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
                   {/* Animated circular progress ring */}
-                  <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+                  <div className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56">
                     <svg
                       className="absolute inset-0 w-full h-full -rotate-90"
                       viewBox="0 0 200 200"
@@ -76,8 +76,8 @@ export default function WhyOrbixx() {
                     </svg>
                     <div className="absolute inset-4 rounded-full border border-dashed border-slate-200 ring-spin" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-5xl sm:text-6xl font-black font-mono text-slate-900 leading-none">
-                        1<span className="text-3xl sm:text-4xl">hr</span>
+                      <span className="text-4xl sm:text-5xl md:text-6xl font-black font-mono text-slate-900 leading-none">
+                        1<span className="text-2xl sm:text-3xl md:text-4xl">hr</span>
                       </span>
                       <span className="text-slate-400 text-[10px] tracking-[0.25em] uppercase mt-1.5 font-mono">
                         per session
@@ -87,7 +87,7 @@ export default function WhyOrbixx() {
 
                   {/* Stats row */}
                   <div
-                    className={`flex items-center gap-6 mt-8 transition-all duration-700 ${
+                    className={`flex items-center gap-3 sm:gap-6 mt-6 sm:mt-8 transition-all duration-700 ${
                       inView
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-4"
@@ -101,7 +101,7 @@ export default function WhyOrbixx() {
                     ].map((s, i) => (
                       <div key={i} className="text-center">
                         <div
-                          className="font-black font-mono text-lg sm:text-xl leading-none"
+                          className="font-black font-mono text-base sm:text-lg md:text-xl leading-none"
                           style={{ color: s.color }}
                         >
                           {s.val}
@@ -115,7 +115,7 @@ export default function WhyOrbixx() {
 
                   {/* Tags */}
                   <div
-                    className={`flex flex-wrap gap-2 mt-8 justify-center transition-all duration-700 ${
+                    className={`flex flex-wrap gap-1.5 sm:gap-2 mt-6 sm:mt-8 justify-center transition-all duration-700 ${
                       inView
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-4"
@@ -130,7 +130,7 @@ export default function WhyOrbixx() {
                     ].map((tag, i) => (
                       <span
                         key={i}
-                        className="text-slate-500 text-[10px] border border-slate-200 rounded-full px-3.5 py-1.5 bg-white tracking-wider uppercase"
+                        className="text-slate-500 text-[9px] sm:text-[10px] border border-slate-200 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-white tracking-wider uppercase"
                       >
                         {tag}
                       </span>
@@ -154,14 +154,14 @@ export default function WhyOrbixx() {
 
               {/* Floating card */}
               <div
-                className={`absolute -bottom-6 -right-4 sm:-right-8 bg-white rounded-2xl p-5 shadow-lg border border-slate-100 transition-all duration-700 delay-500 ${
+                className={`absolute -bottom-6 -right-2 sm:-right-8 bg-white rounded-2xl p-4 sm:p-5 shadow-lg border border-slate-100 transition-all duration-700 delay-500 ${
                   inView
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
                 }`}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF6B4A] to-[#EC4899] flex items-center justify-center text-white font-bold font-mono text-sm">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-[#FF6B4A] to-[#EC4899] flex items-center justify-center text-white font-bold font-mono text-xs sm:text-sm">
                     #1
                   </div>
                   <div>
