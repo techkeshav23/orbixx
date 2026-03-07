@@ -112,7 +112,7 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-3 gap-6">
               {/* Email */}
               <a
-                href="mailto:info@orbixxfitness.com"
+                href="mailto:info.orbixxfitness@gmail.com"
                 className="group relative rounded-2xl p-8 border border-pink-300 bg-white hover:border-primary/30 transition-all duration-500 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -124,7 +124,7 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-lg mb-1">Email Us</h3>
                   <p className="text-slate-500 text-sm mb-3">We reply within 24 hours</p>
-                  <span className="text-primary text-sm font-bold group-hover:underline">info@orbixxfitness.com</span>
+                  <span className="text-primary text-sm font-bold group-hover:underline">info.orbixxfitness@gmail.com</span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary to-transparent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
               </a>

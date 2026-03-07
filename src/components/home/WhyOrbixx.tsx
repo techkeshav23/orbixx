@@ -26,9 +26,9 @@ export default function WhyOrbixx() {
             <div className="relative">
               {/* Main visual — session dashboard */}
               <div className="aspect-[4/5] rounded-3xl overflow-hidden relative bg-gradient-to-br from-white via-slate-50 to-white border border-slate-200 shadow-sm">
-                <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-[#FF6B4A]/[0.07] rounded-full blur-[80px]" />
-                <div className="absolute bottom-10 left-10 w-[180px] h-[180px] bg-[#14B8A6]/[0.06] rounded-full blur-[80px]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] bg-[#EC4899]/[0.05] rounded-full blur-[60px]" />
+                <div className="absolute top-10 right-10 w-[50vw] sm:w-[200px] h-[50vw] sm:h-[200px] bg-[#FF6B4A]/[0.07] rounded-full blur-[80px]" />
+                <div className="absolute bottom-10 left-10 w-[45vw] sm:w-[180px] h-[45vw] sm:h-[180px] bg-[#14B8A6]/[0.06] rounded-full blur-[80px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] sm:w-[160px] h-[40vw] sm:h-[160px] bg-[#EC4899]/[0.05] rounded-full blur-[60px]" />
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
                   {/* Animated circular progress ring */}
@@ -198,10 +198,10 @@ export default function WhyOrbixx() {
             <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
               {/* Table Header */}
               <div className="grid grid-cols-4 bg-[#ffdee4]/50 border-b border-pink-200">
-                <div className="px-4 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Features</div>
-                <div className="px-3 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Offline</div>
-                <div className="px-3 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Other Online</div>
-                <div className="px-3 py-3.5 text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] uppercase tracking-wider text-center">Orbixx</div>
+                <div className="px-2 sm:px-4 py-3.5 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Features</div>
+                <div className="px-1 sm:px-3 py-3.5 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Offline</div>
+                <div className="px-1 sm:px-3 py-3.5 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Other Online</div>
+                <div className="px-1 sm:px-3 py-3.5 text-[10px] sm:text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] uppercase tracking-wider text-center">Orbixx</div>
               </div>
 
               {/* Table Rows */}
@@ -219,7 +219,7 @@ export default function WhyOrbixx() {
                   }`}
                   style={{ transitionDelay: `${600 + i * 100}ms` }}
                 >
-                  <div className="px-4 py-4 text-sm font-bold text-slate-800">{row.feature}</div>
+                  <div className="px-2 sm:px-4 py-4 text-xs sm:text-sm font-bold text-slate-800">{row.feature}</div>
                   <div className="flex justify-center py-4">
                     {row.offline ? (
                       <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center">

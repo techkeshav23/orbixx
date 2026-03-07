@@ -84,11 +84,11 @@ export default function FreeClassPopup({
 
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors cursor-pointer z-10"
+          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-all duration-200 cursor-pointer z-10 hover:scale-110 hover:rotate-90 group"
           aria-label="Close"
         >
           <svg
-            className="w-4 h-4 text-slate-500"
+            className="w-5 h-5 text-white transition-colors"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -105,7 +105,7 @@ export default function FreeClassPopup({
         <div className="p-8 pt-6">
           {!submitted ? (
             <>
-              <div className="text-center mb-6">
+              <div className="text-center mb-6 pr-8">
                 <h3 className="text-2xl font-black text-slate-900 mb-2">
                   Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span>
                 </h3>

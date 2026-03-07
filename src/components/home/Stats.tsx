@@ -4,10 +4,10 @@ import { useInView, useTextScramble } from "@/lib/hooks";
 
 export default function Stats() {
   const { ref, inView } = useInView(0.3);
-  const stat1 = useTextScramble("10,000+", inView, 1000);
-  const stat2 = useTextScramble("500+", inView, 1000);
+  const stat1 = useTextScramble("18,000+", inView, 1000);
+  const stat2 = useTextScramble("550+", inView, 1000);
   const stat3 = useTextScramble("150+", inView, 1000);
-  const stat4 = useTextScramble("4.9/5", inView, 1000);
+  const stat4 = useTextScramble("4.6/5", inView, 1000);
 
   const stats = [
     { display: stat1, label: "ACTIVE MEMBERS", sub: "and growing every day" },

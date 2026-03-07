@@ -53,11 +53,11 @@ export default function Schedule() {
                 <p className="text-slate-500 text-xs">Start your day with energy</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2.5">
               {morningSlots.map((slot, i) => (
                 <div
                   key={slot}
-                  className={`group relative bg-white border border-amber-200/60 rounded-xl px-4 py-3 text-center hover:border-[#FF6B4A] hover:shadow-md hover:shadow-[#FF6B4A]/5 transition-all duration-300 cursor-pointer flex-1 min-w-[70px] ${
+                  className={`group relative bg-white border border-amber-200/60 rounded-xl px-3 sm:px-4 py-3 text-center hover:border-[#FF6B4A] hover:shadow-md hover:shadow-[#FF6B4A]/5 transition-all duration-300 cursor-pointer sm:flex-1 sm:min-w-[70px] ${
                     inView
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-90"
@@ -90,11 +90,11 @@ export default function Schedule() {
                 <p className="text-slate-500 text-xs">Unwind & burn after work</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2.5">
               {eveningSlots.map((slot, i) => (
                 <div
                   key={slot}
-                  className={`group relative bg-white border border-indigo-200/60 rounded-xl px-4 py-3 text-center hover:border-[#EC4899] hover:shadow-md hover:shadow-[#EC4899]/5 transition-all duration-300 cursor-pointer flex-1 min-w-[70px] ${
+                  className={`group relative bg-white border border-indigo-200/60 rounded-xl px-3 sm:px-4 py-3 text-center hover:border-[#EC4899] hover:shadow-md hover:shadow-[#EC4899]/5 transition-all duration-300 cursor-pointer sm:flex-1 sm:min-w-[70px] ${
                     inView
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-90"

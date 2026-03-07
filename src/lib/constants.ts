@@ -6,8 +6,8 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 // Social Media Links
 export const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com";
-export const FACEBOOK_URL =
-  process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://facebook.com";
+export const LINKEDIN_URL =
+  process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/orbixx-fitness/";
 export const YOUTUBE_URL =
   process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://youtube.com";
 

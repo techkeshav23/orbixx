@@ -83,10 +83,10 @@ export default function Hero({
       className="relative min-h-screen flex items-start overflow-hidden bg-white mb-4"
     >
       {/* Soft gradient accents */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF6B4A]/[0.07] rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#14B8A6]/[0.06] rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#EC4899]/[0.05] rounded-full blur-[100px]" />
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[60vw] sm:w-[600px] h-[60vw] sm:h-[600px] bg-[#FF6B4A]/[0.07] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[50vw] sm:w-[500px] h-[50vw] sm:h-[500px] bg-[#14B8A6]/[0.06] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] sm:w-[400px] h-[40vw] sm:h-[400px] bg-[#EC4899]/[0.05] rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-24 w-full">
@@ -102,7 +102,7 @@ export default function Hero({
                 ].map((w) => (
                   <span
                     key={w.text}
-                    className={`block font-mono text-[clamp(2.5rem,8vw,7rem)] font-black leading-[0.95] tracking-tighter ${
+                    className={`block font-mono text-[clamp(2rem,7vw,7rem)] font-black leading-[0.95] tracking-tighter ${
                       heroPhase >= w.idx ? "cine-pullback" : "opacity-0"
                     }`}
                     style={{ color: w.color }}
@@ -119,7 +119,7 @@ export default function Hero({
 
               <button
                 onClick={() => setShowMobileBmi(true)}
-                className="sm:hidden inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-bold border-2 border-[#EC4899] text-[#EC4899] bg-white/90 hover:bg-[#ffdee4] transition-all duration-200 mt-1 shrink-0"
+                className="sm:hidden inline-flex items-center gap-1.5 px-5 py-3 rounded-full text-sm font-bold border-2 border-[#EC4899] text-[#EC4899] bg-white/90 hover:bg-[#ffdee4] transition-all duration-200 mt-1 shrink-0"
               >
                 Check BMI
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -159,7 +159,7 @@ export default function Hero({
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-10 py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
+                  className="magnetic-btn group relative inline-flex items-center gap-3 bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,107,74,0.3)] cursor-pointer"
                   style={{ transform: btnTransform }}
                 >
                   <span>BOOK NOW</span>
@@ -181,7 +181,7 @@ export default function Hero({
               <div className="relative group/see">
                 <button
                   onClick={onSeeResults}
-                  className="relative inline-flex items-center gap-3 text-white px-8 py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible"
+                  className="relative inline-flex items-center gap-3 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible"
                 >
                   {/* Ripple ping rings */}
                   <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
@@ -284,10 +284,10 @@ export default function Hero({
               </div>
               <button
                 onClick={() => setShowMobileBmi(false)}
-                className="w-9 h-9 rounded-full border border-slate-200 text-slate-500 flex items-center justify-center"
+                className="w-10 h-10 rounded-full border border-slate-200 bg-slate-50 hover:bg-red-100 hover:border-red-200 text-slate-500 hover:text-red-500 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:rotate-90"
                 aria-label="Close BMI calculator"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -349,9 +349,9 @@ export default function Hero({
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 py-8 text-center">
           {[
-            { val: "10K+", label: "Active Members" },
-            { val: "4.9", label: "App Rating" },
-            { val: "500+", label: "Cal/Session" },
+            { val: "18K+", label: "Active Members" },
+            { val: "4.6", label: "App Rating" },
+            { val: "550+", label: "Cal/Session" },
             { val: "93%", label: "Retention" },
           ].map((stat, i) => (
             <div
