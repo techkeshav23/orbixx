@@ -11,6 +11,43 @@ export default function AboutPage() {
       <section className="py-16 md:py-20 bg-[#ffdee4]">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
 
+          {/* ── About Orbixx ── */}
+          <div className="mb-20">
+            <span className="text-primary text-xs font-mono tracking-[0.3em] uppercase block mb-4">
+              // ABOUT US
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-8">
+              Our
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"> Story</span>
+            </h2>
+
+            <div className="rounded-3xl bg-gradient-to-br from-white to-pink-50 border border-pink-200 p-7 sm:p-10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px]" />
+              
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 leading-tight relative z-10 max-w-3xl">
+                Empowering people to live <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">healthier, stronger, and more confident</span> lives.
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-8 sm:gap-12 relative z-10 items-center">
+                <div className="space-y-4">
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Orbixx Fitness is a dynamic wellness platform built to make fitness simple, effective, and accessible. From high-energy Zumba to guided home workouts, we combine modern fitness techniques with a supportive, motivating community.
+                  </p>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    At its core, we stand for <strong className="text-slate-900">dedication, growth, and transformation</strong>—helping you develop healthy habits that last a lifetime.
+                  </p>
+                </div>
+
+                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-pink-200 shadow-sm">
+                  <h4 className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-primary uppercase mb-3">Leadership</h4>
+                  <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    Founded by <strong className="text-slate-900 text-lg">Nitin Upadhyay</strong> and co-founded by <strong className="text-slate-900 text-lg">Ram Saini</strong>, our mission goes beyond physical appearance. We are here to inspire you to move more, stay stronger, and build unwavering confidence.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* ── Founders + HQ Split ── */}
           <div className="grid lg:grid-cols-5 gap-8 items-start mb-20">
 

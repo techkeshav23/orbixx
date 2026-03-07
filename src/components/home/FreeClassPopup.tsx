@@ -63,7 +63,7 @@ export default function FreeClassPopup({
   if (!open) return null;
 
   const inputClass = (field: string) =>
-    `w-full px-5 py-4 rounded-xl border text-slate-900 text-base focus:outline-none transition-all placeholder:text-slate-400 ${
+    `w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border text-slate-900 text-sm sm:text-base focus:outline-none transition-all placeholder:text-slate-400 ${
       errors[field]
         ? "border-red-400 bg-red-50 focus:border-red-500 focus:ring-2 focus:ring-red-200"
         : "border-slate-200 bg-slate-50 focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10"
@@ -71,24 +71,24 @@ export default function FreeClassPopup({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.3s_ease]" />
 
       <div
-        className="relative z-10 bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[90vh] overflow-y-auto"
+        className="relative z-10 bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl animate-[popIn_0.4s_cubic-bezier(0.16,1,0.3,1)] max-h-[85vh] sm:max-h-[90vh] overflow-y-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6]" />
+        <div className="h-2 bg-gradient-to-r from-[#FF6B4A] via-[#EC4899] to-[#14B8A6] shrink-0" />
 
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-all duration-200 cursor-pointer z-10 hover:scale-110 hover:rotate-90 group"
+          className="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-all duration-200 cursor-pointer z-10 hover:scale-110 shadow-lg"
           aria-label="Close"
         >
           <svg
-            className="w-5 h-5 text-white transition-colors"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-colors"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -102,21 +102,21 @@ export default function FreeClassPopup({
           </svg>
         </button>
 
-        <div className="p-8 sm:p-10 pt-6 sm:pt-8">
+        <div className="p-5 sm:p-8 pt-6 sm:pt-8 flex-1 overflow-y-auto">
           {!submitted ? (
             <>
-              <div className="text-center mb-6 pr-8">
+              <div className="text-center mb-5 sm:mb-6 pr-10 sm:pr-0">
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">
                   Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span>
                 </h3>
-                <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+                <p className="text-slate-500 text-xs sm:text-base leading-relaxed">
                   Fill out the form and press submit to send your details via WhatsApp. Just tap &quot;Send&quot; in WhatsApp to connect with us!
                 </p>
               </div>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 sm:space-y-4 mb-5 sm:mb-6">
                 <div>
-                  <label className="block text-slate-700 text-base font-bold mb-1.5">Name</label>
+                  <label className="block text-slate-700 text-sm sm:text-base font-bold mb-1.5">Name</label>
                   <input
                     type="text"
                     placeholder="Your full name"
@@ -128,7 +128,7 @@ export default function FreeClassPopup({
                   {errors.name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-base font-bold mb-1.5">WhatsApp Number</label>
+                  <label className="block text-slate-700 text-sm sm:text-base font-bold mb-1.5">WhatsApp Number</label>
                   <input
                     type="tel"
                     placeholder="10 digit number"
@@ -141,7 +141,7 @@ export default function FreeClassPopup({
                   {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-base font-bold mb-1.5">Age</label>
+                  <label className="block text-slate-700 text-sm sm:text-base font-bold mb-1.5">Age</label>
                   <input
                     type="number"
                     placeholder="Your age"
@@ -183,12 +183,14 @@ export default function FreeClassPopup({
                 </div>
               </div>
 
-              <button
-                onClick={handleSubmit}
-                className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-4.5 rounded-xl font-bold text-base hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-              >
-                Submit to WhatsApp
-              </button>
+              <div className="pt-2">
+                <button
+                  onClick={handleSubmit}
+                  className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#EC4899] text-white py-3.5 sm:py-4.5 rounded-xl font-bold text-sm sm:text-base hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                >
+                  Submit to WhatsApp
+                </button>
+              </div>
             </>
           ) : (
             <div className="text-center py-6">
