@@ -86,11 +86,12 @@ export default function Features() {
             return (
             <div
               key={i}
-              className={`group transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`group cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: `${200 + i * 100}ms` }}
               onClick={() => handleCardClick(i)}
+              onTouchEnd={(e) => { e.preventDefault(); handleCardClick(i); }}
             >
               <div className="relative rounded-2xl p-[1px] overflow-hidden">
                 <div
@@ -103,30 +104,32 @@ export default function Features() {
                 >
                   <div
                     className={`absolute inset-0 transition-opacity duration-500 rounded-2xl ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
-                    style={{ background: card.color }}
+                    style={{ background: `${card.color}15` }}
                   />
                   <div
-                    className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[60px] transition-all duration-700 ${isActive ? "opacity-20" : "opacity-0 group-hover:opacity-20"}`}
-                    style={{ background: "#fff" }}
+                    className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[60px] transition-all duration-700 ${isActive ? "opacity-30" : "opacity-0 group-hover:opacity-30"}`}
+                    style={{ background: card.color }}
                   />
                   <div className="relative z-10 flex items-center gap-5">
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${isActive ? "scale-110 rotate-[-4deg] bg-white/20" : "group-hover:scale-110 group-hover:rotate-[-4deg] group-hover:bg-white/20"}`}
-                      style={{ backgroundColor: isActive ? undefined : card.color }}
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${isActive ? "scale-110 rotate-[-4deg]" : "group-hover:scale-110 group-hover:rotate-[-4deg]"}`}
+                      style={{ backgroundColor: card.color }}
                     >
                       <card.Icon className="w-6 h-6 text-white" strokeWidth={2} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className={`font-extrabold text-lg tracking-tight transition-all duration-500 ${isActive ? "text-white translate-x-1" : "text-slate-900 group-hover:text-white group-hover:translate-x-1"}`}>
+                      <h3 className={`font-extrabold text-lg tracking-tight transition-all duration-500 ${isActive ? "translate-x-1" : "group-hover:translate-x-1"}`}
+                        style={{ color: isActive ? card.color : undefined }}
+                      >
                         {card.title}
                       </h3>
-                      <p className={`text-sm leading-relaxed font-semibold mt-1 transition-colors duration-500 whitespace-pre-line ${isActive ? "text-white/90" : "text-slate-700 group-hover:text-white/90"}`}>
+                      <p className={`text-sm leading-relaxed font-semibold mt-1 transition-colors duration-500 whitespace-pre-line ${isActive ? "text-slate-600" : "text-slate-700"}`}>
                         {card.desc}
                       </p>
                     </div>
                     <span
-                      className={`text-3xl font-black font-mono leading-none shrink-0 hidden sm:block transition-colors duration-500 ${isActive ? "!text-white/20" : "group-hover:!text-white/20"}`}
-                      style={{ color: isActive ? undefined : `${card.color}18` }}
+                      className={`text-3xl font-black font-mono leading-none shrink-0 hidden sm:block transition-colors duration-500`}
+                      style={{ color: `${card.color}${isActive ? '30' : '18'}` }}
                     >
                       {card.num}
                     </span>
