@@ -6,9 +6,13 @@ import { WHATSAPP_URL } from "@/lib/constants";
 export default function FreeClassPopup({
   open,
   onClose,
+  planName,
+  planPrice,
 }: {
   open: boolean;
   onClose: () => void;
+  planName?: string;
+  planPrice?: string;
 }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -43,8 +47,9 @@ export default function FreeClassPopup({
     if (!validate()) return;
     const safeName = name.trim().slice(0, 50).replace(/[^\w\s]/gi, "");
     const safeGoal = goal.trim().slice(0, 200).replace(/[^\w\s.,!?-]/gi, "");
+    const planInfo = planName && planPrice ? `\nPlan: ${planName} (${planPrice})` : "";
     const msg = encodeURIComponent(
-      `Hi! I'm ${safeName}.\nAge: ${age.trim()}\nBelly Fat: ${bellyFat}\nGoal: ${safeGoal}\nPhone: ${phone.trim()}\n\nI'd like to start my fitness journey with Orbixx!`
+      `Hi! I'm ${safeName}.\nAge: ${age.trim()}\nBelly Fat: ${bellyFat}\nGoal: ${safeGoal}\nPhone: ${phone.trim()}${planInfo}\n\nI'd like to start my fitness journey with Orbixx!`
     );
     const url = `${WHATSAPP_URL}?text=${msg}`;
     
@@ -107,8 +112,13 @@ export default function FreeClassPopup({
             <>
               <div className="text-center mb-3 sm:mb-4 pr-10 sm:pr-0">
                 <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-1">
-                  Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span>
+                  {planName ? (
+                    <>Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">{planName}</span></>
+                  ) : (
+                    <>Ready To Lose <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#EC4899]">Weight</span></>
+                  )}
                 </h3>
+                {planPrice && <p className="text-sm font-bold text-slate-700 mb-1">{planPrice}</p>}
                 <p className="text-slate-500 text-xs leading-relaxed">
                   Fill the form & tap Submit to connect via WhatsApp!
                 </p>

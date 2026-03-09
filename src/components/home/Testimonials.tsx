@@ -9,8 +9,8 @@ const stories = [
       "I\u2019ve tried every fitness app, gym, and YouTube video. Orbixx is the only thing that actually stuck. 6 months in, 15kg down, and I genuinely look forward to every class.",
     name: "Priya Sharma",
     loc: "Mumbai",
-    result: "-15 KG",
-    time: "6 months",
+    result: "-14 KG",
+    time: "3 months",
   },
   {
     quote:

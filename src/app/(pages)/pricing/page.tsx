@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Footer from "@/components/Footer";
-import { WHATSAPP_URL } from "@/lib/constants";
+import FreeClassPopup from "@/components/home/FreeClassPopup";
 import { Zap, Flame, Gem, Crown, Leaf, Lock, MessageCircle, ShieldCheck, Star } from "lucide-react";
 
 const plans = [
@@ -100,10 +100,17 @@ const plans = [
 ];
 
 export default function PricingPage() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<{ name: string; price: string } | null>(null);
 
   const toggle = (i: number) => {
     setOpenIdx(openIdx === i ? null : i);
+  };
+
+  const handleBuyNow = (planName: string, planPrice: string) => {
+    setSelectedPlan({ name: planName, price: planPrice });
+    setFormOpen(true);
   };
 
   return (
@@ -202,17 +209,15 @@ export default function PricingPage() {
                         </div>
 
                         {/* CTA */}
-                        <a
-                          href={WHATSAPP_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-2 bg-gradient-to-r ${plan.accent} text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-300`}
+                        <button
+                          onClick={() => handleBuyNow(plan.name, plan.price)}
+                          className={`inline-flex items-center gap-2 bg-gradient-to-r ${plan.accent} text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:shadow-lg transition-all duration-300 cursor-pointer`}
                         >
                           Buy Now — {plan.price}
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                           </svg>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -224,6 +229,13 @@ export default function PricingPage() {
       </section>
 
       <Footer />
+
+      <FreeClassPopup
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        planName={selectedPlan?.name}
+        planPrice={selectedPlan?.price}
+      />
     </main>
   );
 }

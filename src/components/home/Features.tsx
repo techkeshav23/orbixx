@@ -1,12 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useInView } from "@/lib/hooks";
 import { Video, Crown, Smartphone, Target, Clock, Dumbbell, type LucideIcon } from "lucide-react";
 
 export default function Features() {
   const { ref, inView } = useInView(0.1);
   const [activeCard, setActiveCard] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleCardClick = useCallback((i: number) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setActiveCard(i);
+    timerRef.current = setTimeout(() => setActiveCard(null), 2000);
+  }, []);
 
   const cards: { num: string; title: string; desc: string; color: string; Icon: LucideIcon }[] = [
     {
@@ -83,7 +90,7 @@ export default function Features() {
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: `${200 + i * 100}ms` }}
-              onClick={() => setActiveCard(activeCard === i ? null : i)}
+              onClick={() => handleCardClick(i)}
             >
               <div className="relative rounded-2xl p-[1px] overflow-hidden">
                 <div
