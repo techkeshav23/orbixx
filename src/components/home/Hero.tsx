@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
-import { WHATSAPP_URL } from "@/lib/constants";
+import { RESULTS_ENABLED, WHATSAPP_URL } from "@/lib/constants";
 import { useLoaderReady } from "@/components/AppShell";
 
 export default function Hero({
@@ -178,21 +178,23 @@ export default function Hero({
                   </svg>
                 </a>
               </div>
-              <div className="relative group/see">
-                <button
-                  onClick={onSeeResults}
-                  className="relative inline-flex items-center justify-center gap-3 text-white px-6 sm:px-8 py-3.5 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible w-full sm:w-auto"
-                >
-                  {/* Ripple ping rings */}
-                  <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
-                  <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/20 see-ping" style={{ animationDelay: "0.8s" }} />
+              {RESULTS_ENABLED && (
+                <div className="relative group/see">
+                  <button
+                    onClick={onSeeResults}
+                    className="relative inline-flex items-center justify-center gap-3 text-white px-6 sm:px-8 py-3.5 sm:py-5 rounded-full font-bold text-sm transition-all duration-300 bg-[#FF6B4A] hover:bg-[#e55a3a] cursor-pointer hover:shadow-[0_0_40px_rgba(255,107,74,0.3)] overflow-visible w-full sm:w-auto"
+                  >
+                    {/* Ripple ping rings */}
+                    <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/40 see-ping" />
+                    <span className="absolute inset-0 rounded-full border-2 border-[#FF6B4A]/20 see-ping" style={{ animationDelay: "0.8s" }} />
 
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  SEE RESULTS
-                </button>
-              </div>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    SEE RESULTS
+                  </button>
+                </div>
+              )}
 
             </div>
           </div>

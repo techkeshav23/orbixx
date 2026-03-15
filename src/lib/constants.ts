@@ -3,6 +3,9 @@ export const WHATSAPP_NUMBER =
 
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
+// Feature flag: keep Results code in repo but disable access in UI/routes.
+export const RESULTS_ENABLED = process.env.NEXT_PUBLIC_RESULTS_ENABLED === "true";
+
 // Social Media Links
 export const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com";

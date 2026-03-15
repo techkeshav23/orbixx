@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { carouselImages } from "@/lib/constants";
+import { RESULTS_ENABLED } from "@/lib/constants";
 
 export default function Carousel3D({
   open,
@@ -225,18 +226,20 @@ export default function Carousel3D({
       </div>
 
       {/* Footer link */}
-      <div className="relative z-[110] mt-6 sm:mt-8 mb-8">
-        <Link
-          href="/results"
-          className="text-white/50 hover:text-white text-xs font-mono tracking-wider transition-colors duration-300 flex items-center gap-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          View all details
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-          </svg>
-        </Link>
-      </div>
+      {RESULTS_ENABLED && (
+        <div className="relative z-[110] mt-6 sm:mt-8 mb-8">
+          <Link
+            href="/results"
+            className="text-white/50 hover:text-white text-xs font-mono tracking-wider transition-colors duration-300 flex items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            View all details
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+            </svg>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

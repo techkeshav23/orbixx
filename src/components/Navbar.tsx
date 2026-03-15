@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { WHATSAPP_URL } from "@/lib/constants";
+import { RESULTS_ENABLED, WHATSAPP_URL } from "@/lib/constants";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,12 +25,15 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/results", label: "Results" },
     { href: "/trainers", label: "Trainers" },
     { href: "/pricing", label: "Pricing" },
     { href: "/schedule", label: "Schedule" },
     { href: "/about", label: "About" },
   ];
+
+  if (RESULTS_ENABLED) {
+    navLinks.splice(1, 0, { href: "/results", label: "Results" });
+  }
 
   return (
     <nav

@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const resultsEnabled = process.env.NEXT_PUBLIC_RESULTS_ENABLED === "true";
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
   // Disable source maps in production so source code is never exposed
@@ -7,6 +9,17 @@ const nextConfig: NextConfig = {
   // Prevent exposing internal Next.js build IDs
   generateBuildId: async () => {
     return `build-${Date.now()}`;
+  },
+  async redirects() {
+    if (resultsEnabled) return [];
+
+    return [
+      {
+        source: "/results",
+        destination: "/",
+        permanent: false,
+      },
+    ];
   },
   async headers() {
     return [
