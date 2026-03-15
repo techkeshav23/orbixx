@@ -41,7 +41,7 @@ export default function AboutPage() {
                 <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-pink-200 shadow-sm">
                   <h4 className="text-[10px] sm:text-xs font-mono tracking-[0.2em] text-primary uppercase mb-3">Leadership</h4>
                   <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
-                    Founded by <strong className="text-slate-900 text-lg">Nitin Upadhyay</strong> and co-founded by <strong className="text-slate-900 text-lg">Ram Saini</strong>, our mission goes beyond physical appearance. We are here to inspire you to move more, stay stronger, and build unwavering confidence.
+                    <strong className="text-slate-900 text-lg">Nitin Upadhyay</strong> and <strong className="text-slate-900 text-lg">Ram Saini</strong> are the founders of ORBIXX FITNESS. Our mission goes beyond physical appearance. We are here to inspire you to move more, stay stronger, and build unwavering confidence.
                   </p>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function AboutPage() {
                       <span className="text-white text-xl font-black">RS</span>
                     </div>
                     <h4 className="font-black text-slate-900 group-hover:text-white text-lg transition-colors duration-500">Ram Saini</h4>
-                    <p className="text-secondary group-hover:text-white/80 text-sm font-bold mt-1 transition-colors duration-500">Co-Founder</p>
+                    <p className="text-secondary group-hover:text-white/80 text-sm font-bold mt-1 transition-colors duration-500">Founder</p>
                     <p className="text-slate-500 group-hover:text-white/60 text-xs mt-3 transition-colors duration-500">
                       Driving operations and growth to bring world-class fitness experiences online.
                     </p>
